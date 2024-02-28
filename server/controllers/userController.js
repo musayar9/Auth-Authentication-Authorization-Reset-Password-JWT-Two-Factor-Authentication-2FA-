@@ -2,7 +2,7 @@ const bcryptjs = require("bcryptjs");
 const errorHandler = require("../utils/errorHandler");
 const User = require("../models/userModel");
 const sendEmail = require("../utils/sendEmail");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 const getUsers = async (req, res, next) => {
   const user = await User.find({});
@@ -60,7 +60,10 @@ const signin = async (req, res, next) => {
       isUser.otp = otp;
       await isUser.save();
       await sendEmail(email, otp);
-      return res.status(200).cookie("access_token", token, { httpOnly: true }).json(isUser);
+      return res
+        .status(200)
+        .cookie("access_token", token, { httpOnly: true })
+        .json(isUser);
     } else {
       const { password: pass, ...rest } = isUser._doc;
       return res
@@ -73,4 +76,52 @@ const signin = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, getUsers, signin };
+const verifyOtp = async (req, res, next) => {
+  const { otp } = req.body;
+  const verifyUser = await User.findOne({ otp });
+  try {
+    if (verifyUser) {
+      verifyUser.verified = true;
+      await verifyUser.save();
+      res
+        .status(200)
+        .json({ message: "User Verified Successfully", verifyUser });
+    } else {
+      return next(errorHandler(400, "Invalid Otp Check Your Email"));
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const verifyUpdate = async (req, res, next) => {
+  const { otp } = req.body;
+
+  try {
+    const updateUser = await User.findUpdate(
+      otp,
+      { $set: { verified: true } },
+      { new: true }
+    );
+    res.status(200).json(updateUser);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return next(errorHandler(404, "User Nor Found"));
+    }
+    const { password, ...rest } = user._doc;
+
+    res.status(200).json(rest);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { signup, getUsers, signin, verifyOtp, verifyUpdate, getUser };
