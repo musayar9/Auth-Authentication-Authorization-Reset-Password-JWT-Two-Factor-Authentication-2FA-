@@ -14,8 +14,8 @@ const getUsers = async (req, res, next) => {
 };
 
 const signup = async (req, res, next) => {
-  const { username, surname, email, password } = req.body;
-
+  const { username, surname, email, password } = req.body.formData;
+  console.log(req.body);
   if (!username || !surname || !email || !password) {
     return next(errorHandler(401, "Please fill full form!"));
   }
