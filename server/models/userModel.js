@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minLength: [6, "Password must contain at least 6 characters"],
-      maxLength: [14, "Password cannot exceed 14"],
+  
     },
     otp: String,
     verified: {
