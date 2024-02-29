@@ -25,9 +25,9 @@ export const updateVerify = createAsyncThunk(
   }
 );
 
-export const signOut = createAsyncThunk("user/signout", async () => {
+export const signOut = createAsyncThunk("user/signOut", async () => {
   try {
-    const res = await axios(`/api/users/signOut`);
+    const res = await axios.post(`/api/users/signOut`);
     const data = res.data;
     console.log(data);
 
@@ -36,6 +36,7 @@ export const signOut = createAsyncThunk("user/signout", async () => {
     return err;
   }
 });
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -69,6 +70,21 @@ const userSlice = createSlice({
     builder.addCase(updateVerify.rejected, (state, action) => {
       state.userStatus = "failed";
       state.error = action.error.message;
+    });
+
+    //sign out
+
+    builder.addCase(signOut.pending, (state) => {
+      state.userStatus = "loading";
+    });
+    builder.addCase(signOut.fulfilled, (state) => {
+      state.userStatus = "success";
+      state.user = null;
+    });
+
+    builder.addCase(signOut.rejected, (state, action) => {
+      state.userStatus = "failed";
+      state.error = action.payload.message;
     });
   },
 });

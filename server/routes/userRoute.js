@@ -8,6 +8,7 @@ const {
   getUser,
   signOut,
 } = require("../controllers/userController");
+const verifyToken = require("../utils/verifyToken");
 
 const router = express.Router();
 
@@ -17,6 +18,6 @@ router.post("/signin", signin);
 router.post("/verify", verifyOtp);
 router.put("/verifyupdate/:id", verifyUpdate);
 router.get("/:id", getUser);
-router.get("/signOut", signOut);
+router.post("/signOut", signOut);
 
 module.exports = router;

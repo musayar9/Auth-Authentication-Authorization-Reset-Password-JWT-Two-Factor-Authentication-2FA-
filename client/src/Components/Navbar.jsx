@@ -1,8 +1,21 @@
 import { NavLink } from "react-router-dom";
-import {useSelector} from "react-redux"
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "../redux/userSlice";
 const Navbar = () => {
-const {user} = useSelector((state)=>state.user)
- 
+  const { user, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+
+  const handleSignOut = () => {
+  dispatch(signOut())
+
+  navigate("/sign-in")
+  
+  };
+  
+  console.log(error)
+  console.log(user)
   return (
     <nav className="bg-white dark:bg-gray-900   z-20 top-0 start-0  border-b border-gray-300 dark:border-gray-600 shadow ">
       <div className="max-w-6xl flex flex-wrap items-center justify-between mx-auto p-3">
@@ -45,17 +58,11 @@ const {user} = useSelector((state)=>state.user)
 
           {user && user?.verified ? (
             <>
-              <button>
-                <NavLink
-                  to="/sign-in"
-                  className={({ isActive }) => {
-                    return isActive
-                      ? "text-teal-600    "
-                      : "text-[#334155] hover:text-teal-600 ";
-                  }}
-                >
+              <button onClick={handleSignOut}>
+              
+                
                   Sign Out
-                </NavLink>
+            
               </button>
             </>
           ) : (

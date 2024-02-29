@@ -136,7 +136,14 @@ const getUser = async (req, res, next) => {
 };
 
 const signOut = async (req, res, next) => {
-  res.status(400).clearCookie("access_token").json("Sign Outed ");
+
+try{
+
+ res.clearCookie("access_token").status(200).json("Sign Outed ");
+}catch(err){
+next(err)
+}
+ 
 };
 
 const deleteUser = async (req, res, next) => {
