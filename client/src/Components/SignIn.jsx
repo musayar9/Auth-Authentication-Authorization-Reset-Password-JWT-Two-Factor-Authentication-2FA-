@@ -9,9 +9,12 @@ const SignIn = () => {
     email: "",
     password: "",
   });
+
+  const [errorMessage, setErrorMessage] = useState("");
   const { user, userStatus, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -22,18 +25,25 @@ const SignIn = () => {
     e.preventDefault();
     await dispatch(signIn(formData));
   };
+ 
 
   useEffect(() => {
-    if (userStatus === "success") {
+    if (user && user?.response?.data.statusCode !== 400) {
       if (!user.verified) {
         navigate(`/verify-otp/${user._id}`);
       } else {
         navigate("/");
       }
+    } else {
+      setErrorMessage(user?.response?.data?.message);
+       setTimeout(() => {
+         setErrorMessage("");
+       }, 3000);
     }
-  });
 
-  console.log(user);
+
+  }, [user]);
+
   return (
     <div className="mx-auto max-w-md p-2 mt-12 ">
       <div className="flex items-center justify-center flex-col">
@@ -112,6 +122,12 @@ const SignIn = () => {
       {userStatus === "failed" && (
         <div>
           <p>{error}</p>
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="bg-red-600 rounded-md p-2">
+          <p className="text-white">{errorMessage}</p>
         </div>
       )}
     </div>

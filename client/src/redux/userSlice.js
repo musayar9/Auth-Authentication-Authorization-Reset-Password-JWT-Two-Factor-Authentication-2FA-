@@ -13,12 +13,12 @@ export const signIn = createAsyncThunk("user/signIn", async (formData) => {
 });
 
 export const updateVerify = createAsyncThunk(
-  "user/verifyupdate",
+  "user/verifyupdates",
   async ({ id, otp }) => {
     try {
-      const res = await axios.put(`/api/users/verfiyupdate/${id}`, otp);
+      const res = await axios.put(`/api/users/verifyupdate/${id}`, {otp});
       const data = res.data;
-
+      console.log(otp);
       console.log(data);
       return data;
     } catch (error) {

@@ -56,16 +56,19 @@ const signin = async (req, res, next) => {
     const token = jwt.sign({ id: isUser._id }, process.env.JWT_SECRET_KEY);
 
     if (!isUser.verified) {
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      isUser.otp = otp;
+      const otpValue = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      isUser.otp = otpValue;
+          
       await isUser.save();
-      await sendEmail(email, otp);
+      await sendEmail(email, otpValue);
+const { password: pass, otp, ...rest } = isUser._doc;
       return res
         .status(200)
         .cookie("access_token", token, { httpOnly: true })
-        .json(isUser);
+        .json(rest);
     } else {
-      const { password: pass, ...rest } = isUser._doc;
+      const { password: pass, otp, ...rest } = isUser._doc;
       return res
         .status(200)
         .cookie("access_token", token, { httpOnly: true })
@@ -96,18 +99,22 @@ const verifyOtp = async (req, res, next) => {
 
 const verifyUpdate = async (req, res, next) => {
   const { otp } = req.body;
- const verifyUser = await User.findOne({ otp });
- if(verifyUser.otp !== otp){
- return next(errorHandler(400, "Invalid Otp Check Your Email"))
- }
- 
+
+  const verifyUser = await User.findOne({otp});
+
+  if (verifyUser?.otp !== otp) {
+    return next(errorHandler(400, "Invalid Otp Check Your Email"));
+  }
+
   try {
     const updateUser = await User.findByIdAndUpdate(
-    req.params.id,
+      req.params.id,
       { $set: { verified: true } },
       { new: true }
     );
-    res.status(200).json(updateUser);
+    
+    const {password, otp, ...rest} = updateUser._doc
+    res.status(200).json(rest);
   } catch (err) {
     next(err);
   }
