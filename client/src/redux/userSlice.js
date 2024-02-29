@@ -5,7 +5,7 @@ export const signIn = createAsyncThunk("user/signIn", async (formData) => {
   try {
     const res = await axios.post(`/api/users/signin`, formData);
     const data = res.data;
-    console.log(res.data);
+
     return data;
   } catch (error) {
     return error;
@@ -16,16 +16,26 @@ export const updateVerify = createAsyncThunk(
   "user/verifyupdates",
   async ({ id, otp }) => {
     try {
-      const res = await axios.put(`/api/users/verifyupdate/${id}`, {otp});
+      const res = await axios.put(`/api/users/verifyupdate/${id}`, { otp });
       const data = res.data;
-      console.log(otp);
-      console.log(data);
       return data;
     } catch (error) {
       return error;
     }
   }
 );
+
+export const signOut = createAsyncThunk("user/signout", async () => {
+  try {
+    const res = await axios(`/api/users/signOut`);
+    const data = res.data;
+    console.log(data);
+
+    return data;
+  } catch (err) {
+    return err;
+  }
+});
 const userSlice = createSlice({
   name: "user",
   initialState: {

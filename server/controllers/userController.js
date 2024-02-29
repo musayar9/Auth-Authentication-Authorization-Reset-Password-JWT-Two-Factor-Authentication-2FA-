@@ -57,12 +57,12 @@ const signin = async (req, res, next) => {
 
     if (!isUser.verified) {
       const otpValue = Math.floor(100000 + Math.random() * 900000).toString();
-      
+
       isUser.otp = otpValue;
-          
+
       await isUser.save();
       await sendEmail(email, otpValue);
-const { password: pass, otp, ...rest } = isUser._doc;
+      const { password: pass, otp, ...rest } = isUser._doc;
       return res
         .status(200)
         .cookie("access_token", token, { httpOnly: true })
@@ -100,7 +100,7 @@ const verifyOtp = async (req, res, next) => {
 const verifyUpdate = async (req, res, next) => {
   const { otp } = req.body;
 
-  const verifyUser = await User.findOne({otp});
+  const verifyUser = await User.findOne({ otp });
 
   if (verifyUser?.otp !== otp) {
     return next(errorHandler(400, "Invalid Otp Check Your Email"));
@@ -112,8 +112,8 @@ const verifyUpdate = async (req, res, next) => {
       { $set: { verified: true } },
       { new: true }
     );
-    
-    const {password, otp, ...rest} = updateUser._doc
+
+    const { password, otp, ...rest } = updateUser._doc;
     res.status(200).json(rest);
   } catch (err) {
     next(err);
@@ -135,4 +135,34 @@ const getUser = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, getUsers, signin, verifyOtp, verifyUpdate, getUser };
+const signOut = async (req, res, next) => {
+  res.status(400).clearCookie("access_token").json("Sign Outed ");
+};
+
+const deleteUser = async (req, res, next) => {
+  if (req.user.id !== req.params.id) {
+    return next(errorHandler(400, "You can delete only your account"));
+  }
+  const isUser = await User.findOne(req.params.id);
+  if (!isUser) {
+    return next(errorHandler(400, "User is Not Found"));
+  }
+
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.clearCookie("access_token").status(200).json("User is Deleted");
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  signup,
+  getUsers,
+  signin,
+  verifyOtp,
+  verifyUpdate,
+  getUser,
+  deleteUser,
+  signOut,
+};
