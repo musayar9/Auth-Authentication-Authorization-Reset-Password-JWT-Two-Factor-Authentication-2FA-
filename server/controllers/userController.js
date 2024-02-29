@@ -96,10 +96,14 @@ const verifyOtp = async (req, res, next) => {
 
 const verifyUpdate = async (req, res, next) => {
   const { otp } = req.body;
-
+ const verifyUser = await User.findOne({ otp });
+ if(verifyUser.otp !== otp){
+ return next(errorHandler(400, "Invalid Otp Check Your Email"))
+ }
+ 
   try {
-    const updateUser = await User.findUpdate(
-      otp,
+    const updateUser = await User.findByIdAndUpdate(
+    req.params.id,
       { $set: { verified: true } },
       { new: true }
     );

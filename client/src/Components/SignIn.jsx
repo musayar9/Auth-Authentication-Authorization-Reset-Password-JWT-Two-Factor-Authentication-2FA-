@@ -1,7 +1,39 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginSvg from "../assets/login.svg";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signIn } from "../redux/userSlice";
 
 const SignIn = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const { user, userStatus, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await dispatch(signIn(formData));
+  };
+
+  useEffect(() => {
+    if (userStatus === "success") {
+      if (!user.verified) {
+        navigate(`/verify-otp/${user._id}`);
+      } else {
+        navigate("/");
+      }
+    }
+  });
+
+  console.log(user);
   return (
     <div className="mx-auto max-w-md p-2 mt-12 ">
       <div className="flex items-center justify-center flex-col">
@@ -13,15 +45,18 @@ const SignIn = () => {
         <h1 className="text-3xl font-semibold my-8 text-slate-600">Sign In</h1>
       </div>
 
-      <form className="flex flex-col gap-2">
+      <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
         <div className="relative ">
           <input
-            type="text"
+            type="email"
             id="email"
             className="block px-2.5 pb-2.5 pt-4 w-full  text-sm
   text-gray-900 bg-transparent rounded-md border-1 border-gray-300 appearance-none dark:text-white
   dark:border-gray-600 dark:focus:border-emerald-500 focus:outline-none focus:ring-0 focus:border-emerald-600 peer"
             placeholder=" "
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
           />
           <label
             htmlFor="email"
@@ -39,6 +74,9 @@ const SignIn = () => {
   text-gray-900 bg-transparent rounded-md border-1 border-gray-300 appearance-none dark:text-white
   dark:border-gray-600 dark:focus:border-emerald-500 focus:outline-none focus:ring-0 focus:border-emerald-600 peer"
             placeholder=" "
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
           />
           <label
             htmlFor="password"
@@ -47,6 +85,13 @@ const SignIn = () => {
             Password
           </label>
         </div>
+
+        <button
+          type="submit"
+          className="bg-emerald-600 text-white p-2 hover:translate-y-1 rounded-md shadow-md"
+        >
+          {userStatus === "loading" ? "Loading..." : "Sign In..."}
+        </button>
       </form>
 
       <div className="flex justify-between my-2">
@@ -63,6 +108,12 @@ const SignIn = () => {
           </Link>
         </p>
       </div>
+
+      {userStatus === "failed" && (
+        <div>
+          <p>{error}</p>
+        </div>
+      )}
     </div>
   );
 };

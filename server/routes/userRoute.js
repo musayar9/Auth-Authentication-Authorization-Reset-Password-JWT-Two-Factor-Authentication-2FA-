@@ -14,7 +14,7 @@ router.get("/", getUsers);
 router.post("/signup", signup);
 router.post("/signin", signin);
 router.post("/verify", verifyOtp);
-router.put("/verifyupdate", verifyUpdate);
+router.put("/verifyupdate/:id", verifyUpdate);
 router.get("/:id", getUser);
 
 module.exports = router;

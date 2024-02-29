@@ -1,5 +1,31 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
+export const signIn = createAsyncThunk("user/signIn", async (formData) => {
+  try {
+    const res = await axios.post(`/api/users/signin`, formData);
+    const data = res.data;
+    console.log(res.data);
+    return data;
+  } catch (error) {
+    return error;
+  }
+});
+
+export const updateVerify = createAsyncThunk(
+  "user/verifyupdate",
+  async ({ id, otp }) => {
+    try {
+      const res = await axios.put(`/api/users/verfiyupdate/${id}`, otp);
+      const data = res.data;
+
+      console.log(data);
+      return data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -8,8 +34,33 @@ const userSlice = createSlice({
     error: null,
   },
   reducers: {},
+  extraReducers: (builder) => {
+    // sign-in reducers
+    builder.addCase(signIn.pending, (state) => {
+      state.userStatus = "loading";
+    });
+    builder.addCase(signIn.fulfilled, (state, action) => {
+      state.userStatus = "success";
+      state.user = action.payload;
+    });
+    builder.addCase(signIn.rejected, (state, action) => {
+      state.userStatus = "failed";
+      state.error = action.error.message;
+    });
 
+    // update verify-otp
+    builder.addCase(updateVerify.pending, (state) => {
+      state.userStatus = "loading";
+    });
+    builder.addCase(updateVerify.fulfilled, (state, action) => {
+      state.userStatus = "success";
+      state.user = action.payload;
+    });
+    builder.addCase(updateVerify.rejected, (state, action) => {
+      state.userStatus = "failed";
+      state.error = action.error.message;
+    });
+  },
 });
 
-
-export default userSlice.reducer
+export default userSlice.reducer;
