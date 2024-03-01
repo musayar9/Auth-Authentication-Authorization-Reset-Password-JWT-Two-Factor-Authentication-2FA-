@@ -25,6 +25,16 @@ export const updateVerify = createAsyncThunk(
   }
 );
 
+export const deleteUser = createAsyncThunk("user/deleteUser", async (id) => {
+  try {
+    const res = await axios.delete(`/api/users/delete/${id}`);
+    const data = res;
+    return data;
+  } catch (error) {
+    return error;
+  }
+});
+
 export const signOut = createAsyncThunk("user/signOut", async () => {
   try {
     const res = await axios.post(`/api/users/signOut`);
@@ -43,6 +53,7 @@ const userSlice = createSlice({
     user: null,
     userStatus: "idle",
     error: null,
+    deleteInformation:""
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -70,6 +81,21 @@ const userSlice = createSlice({
     builder.addCase(updateVerify.rejected, (state, action) => {
       state.userStatus = "failed";
       state.error = action.error.message;
+    });
+
+    //delete User
+
+    builder.addCase(deleteUser.pending, (state) => {
+      state.userStatus = "loading";
+    });
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      state.userStatus = "success";
+      state.user = null;
+      state.deleteInformation = action.payload
+    });
+    builder.addCase(deleteUser.rejected, (state, action) => {
+      state.userStatus = "failed";
+      state.error = action.payload;
     });
 
     //sign out

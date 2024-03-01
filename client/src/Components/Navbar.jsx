@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../redux/userSlice";
 const Navbar = () => {
-  const { user, error } = useSelector((state) => state.user);
+  const { user,  loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
@@ -14,8 +14,11 @@ const Navbar = () => {
   
   };
   
-  console.log(error)
-  console.log(user)
+  
+  if(loading==="loading"){
+    <p>logging out...</p>
+  }
+
   return (
     <nav className="bg-white dark:bg-gray-900   z-20 top-0 start-0  border-b border-gray-300 dark:border-gray-600 shadow ">
       <div className="max-w-6xl flex flex-wrap items-center justify-between mx-auto p-3">

@@ -136,28 +136,29 @@ const getUser = async (req, res, next) => {
 };
 
 const signOut = async (req, res, next) => {
-
-try{
-
- res.clearCookie("access_token").status(200).json("Sign Outed ");
-}catch(err){
-next(err)
-}
- 
+  try {
+    res.clearCookie("access_token").status(200).json("Sign Outed ");
+  } catch (err) {
+    next(err);
+  }
 };
 
 const deleteUser = async (req, res, next) => {
+  // console.log("user", req.user);
   if (req.user.id !== req.params.id) {
     return next(errorHandler(400, "You can delete only your account"));
   }
-  const isUser = await User.findOne(req.params.id);
-  if (!isUser) {
-    return next(errorHandler(400, "User is Not Found"));
-  }
+
+
+  console.log(req.user)
+  // const isUser = await User.findOne({id});
+  // if (!isUser) {
+  //   return next(errorHandler(400, "User is Not Found"));
+  // }
 
   try {
     await User.findByIdAndDelete(req.params.id);
-    res.clearCookie("access_token").status(200).json("User is Deleted");
+    res.status(200).json("User is Deleted");
   } catch (error) {
     next(error);
   }
