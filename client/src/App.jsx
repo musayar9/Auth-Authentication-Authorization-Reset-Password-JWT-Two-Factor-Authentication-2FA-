@@ -1,8 +1,8 @@
-import Home from "./Components/Home";
+import About from "./Components/About";
 import Navbar from "./Components/Navbar";
 import { Routes, Route } from "react-router-dom";
 import Profile from "./Components/Profile";
-import About from "./Components/About";
+import Home from "./Components/Home";
 import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
 import VerifyOtp from "./Components/VerifyOtp";

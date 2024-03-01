@@ -72,7 +72,7 @@ const SignUp = () => {
             <input
               type="text"
               id="username"
-              className="block px-8 pb-2.5 pt-4 w-full md:w-52 text-sm text-center
+              className="block px-2.5 pb-2.5 pt-4 w-full md:w-52 text-sm 
   text-gray-900 bg-transparent rounded-md border-1 border-gray-300 appearance-none dark:text-white
   dark:border-gray-600 dark:focus:border-emerald-500 focus:outline-none focus:ring-0 focus:border-emerald-600 peer"
               placeholder=" "
@@ -91,7 +91,7 @@ const SignUp = () => {
             <input
               type="text"
               id="surname"
-              className="block px-8 pb-2.5 pt-4 w-full md:w-52  text-sm text-center
+              className="block px-2.5 pb-2.5 pt-4 w-full md:w-52  text-sm 
   text-gray-900 bg-transparent rounded-md border-1 border-gray-300 appearance-none dark:text-white
   dark:border-gray-600 dark:focus:border-emerald-500 focus:outline-none focus:ring-0 focus:border-emerald-600 peer"
               placeholder=" "

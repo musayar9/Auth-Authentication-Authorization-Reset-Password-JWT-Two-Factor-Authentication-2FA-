@@ -1,31 +1,30 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../redux/userSlice";
+import { Dropdown, Avatar } from "flowbite-react";
 const Navbar = () => {
-  const { user,  loading } = useSelector((state) => state.user);
+  const { user, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSignOut = () => {
-  dispatch(signOut())
+    dispatch(signOut());
 
-  navigate("/sign-in")
-  
+    navigate("/sign-in");
   };
-  
-  
-  if(loading==="loading"){
-    <p>logging out...</p>
+
+  if (loading === "loading") {
+    <p>logging out...</p>;
   }
 
   return (
     <nav className="bg-white dark:bg-gray-900   z-20 top-0 start-0  border-b border-gray-300 dark:border-gray-600 shadow ">
       <div className="max-w-6xl flex flex-wrap items-center justify-between mx-auto p-3">
         <h2 className="text-lg md:text-xl font-bold text-slate-600 ">
-          Auth <span className="text-emerald-500 font-bold">OTP</span>
+          Auth <span className="text-emerald-500 font-bold">OTP-JWT</span>
         </h2>
-        <div className="flex gap-2 font-semibold text-md ">
+        <div className="flex gap-2 font-semibold text-md self-center pr-16 ">
           <NavLink
             to="/"
             className={({ isActive }) => {
@@ -43,7 +42,7 @@ const Navbar = () => {
             About
           </NavLink>
 
-          {user && user.verified && (
+          {user && user?.verified && (
             <NavLink
               to="/profile"
               className={({ isActive }) => {
@@ -54,33 +53,35 @@ const Navbar = () => {
             </NavLink>
           )}
         </div>
-        <div className="font-semibold text-sm md:text-md bg-white px-4 py-2 border border-gray-300 rounded-sm shadow-md ">
+        <div className=" ">
           {/* <button className="px-2   rounded-md">
             <Link className="">Register</Link>
           </button> */}
 
-          {user && user?.verified ? (
+          {user && user.verified ? (
             <>
-              <button onClick={handleSignOut}>
-              
-                
-                  Sign Out
-            
-              </button>
+              {/* <button onClick={handleSignOut}>Sign Out</button> */}
+              <Dropdown
+                arrowIcon={false}
+                inline
+                label={<Avatar alt="user" rounded />}
+              >
+                <Dropdown.Header>
+                  <span className="block text-sm text-blue-500">
+                    @{user?.username} {user.surname}
+                  </span>
+                </Dropdown.Header>
+                <Link to="/profile">
+                  <Dropdown.Item>Profile</Dropdown.Item>
+                </Link>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
+              </Dropdown>
             </>
           ) : (
             <>
-              <button>
-                <NavLink
-                  to="/sign-in"
-                  className={({ isActive }) => {
-                    return isActive
-                      ? "text-teal-600    "
-                      : "text-[#334155] hover:text-teal-600 ";
-                  }}
-                >
-                  Sign İn
-                </NavLink>
+              <button className="bg-emerald-500 px-4 py-1 text-white rounded-sm hover:scale-110 duration-150 ease-linear hover:bg-emerald-600 ">
+                <Link to="/sign-in">Sign In</Link>
               </button>
             </>
           )}

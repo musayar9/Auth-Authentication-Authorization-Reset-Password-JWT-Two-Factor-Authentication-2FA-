@@ -149,8 +149,7 @@ const deleteUser = async (req, res, next) => {
     return next(errorHandler(400, "You can delete only your account"));
   }
 
-
-  console.log(req.user)
+  console.log(req.user);
   // const isUser = await User.findOne({id});
   // if (!isUser) {
   //   return next(errorHandler(400, "User is Not Found"));
@@ -158,7 +157,7 @@ const deleteUser = async (req, res, next) => {
 
   try {
     await User.findByIdAndDelete(req.params.id);
-    res.status(200).json("User is Deleted");
+    res.status(200).clearCookie("token").json("User is Deleted");
   } catch (error) {
     next(error);
   }

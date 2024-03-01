@@ -10,7 +10,7 @@ const Profile = () => {
     password: "",
   });
 
-  const { user, userStatus, deleteInformation } = useSelector(
+  const { user, userStatus } = useSelector(
     (state) => state.user
   );
   const dispatch = useDispatch();
@@ -22,10 +22,9 @@ const Profile = () => {
 
   const handleDeleteUser = () => {
     dispatch(deleteUser(user?._id));
-   
   };
 
-  console.log("user", deleteInformation);
+
   return (
     <div className="mx-auto max-w-md p-2">
       <div className="flex items-center justify-center flex-col mt-12">

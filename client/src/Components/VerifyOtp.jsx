@@ -23,8 +23,7 @@ const VerifyOtp = () => {
       navigate("/");
     }
   });
-  console.log("ot", otp);
-  console.log(user);
+
   return (
     <div className="mx-auto max-w-md mt-24">
       <div className="flex flex-col items-center justify-center ">

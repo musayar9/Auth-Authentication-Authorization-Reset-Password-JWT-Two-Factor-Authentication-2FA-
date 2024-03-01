@@ -28,7 +28,7 @@ const SignIn = () => {
  
 
   useEffect(() => {
-    if (user && user?.response?.data.statusCode !== 400) {
+    if (user && user?.response?.data?.statusCode !== 400) {
       if (!user.verified) {
         navigate(`/verify-otp/${user?._id}`);
       } else {
