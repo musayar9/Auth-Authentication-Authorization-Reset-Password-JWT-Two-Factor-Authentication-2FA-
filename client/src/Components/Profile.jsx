@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteUser } from "../redux/userSlice";
-import { useNavigate } from "react-router-dom";
+
 const Profile = () => {
   const [formData, setFormData] = useState({
     username: "",

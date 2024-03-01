@@ -65,13 +65,13 @@ const signin = async (req, res, next) => {
       const { password: pass, otp, ...rest } = isUser._doc;
       return res
         .status(200)
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("token", token, { httpOnly: true })
         .json(rest);
     } else {
       const { password: pass, otp, ...rest } = isUser._doc;
       return res
         .status(200)
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("token", token, { httpOnly: true })
         .json(rest);
     }
   } catch (error) {
@@ -137,7 +137,7 @@ const getUser = async (req, res, next) => {
 
 const signOut = async (req, res, next) => {
   try {
-    res.clearCookie("access_token").status(200).json("Sign Outed ");
+    res.clearCookie("token").status(200).json("Sign Outed ");
   } catch (err) {
     next(err);
   }
