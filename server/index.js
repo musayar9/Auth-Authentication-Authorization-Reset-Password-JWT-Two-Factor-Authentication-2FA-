@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/userRoute");
-
+const resetRoutes = require("./routes/resetPasswordRoute");
 dotenv.config();
 
 const app = express();
@@ -20,6 +20,7 @@ app.use(cookieParser());
 app.use(cors());
 
 app.use("/api/users", userRoutes);
+app.use("/api/reset-password", resetRoutes);
 app.listen(5000, () => {
   console.log(`Server listening on port ${5000}`);
 });
