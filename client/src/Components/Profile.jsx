@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteUser } from "../redux/userSlice";
+import { deleteUser, updateUser } from "../redux/userSlice";
 
 const Profile = () => {
+ const { user, userStatus } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
     username: "",
     surname: "",
-    email: "",
-    password: "",
+    email: user?.email,
+    password: user?.password,
   });
 
-  const { user, userStatus } = useSelector(
-    (state) => state.user
-  );
+ 
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -24,14 +23,17 @@ const Profile = () => {
     dispatch(deleteUser(user?._id));
   };
 
-
+  const handleUpdateUser = (e) => {
+    e.preventDefault();
+    dispatch(updateUser({ id: user?._id, formData }));
+  };
   return (
     <div className="mx-auto max-w-md p-2">
       <div className="flex items-center justify-center flex-col mt-12">
         <h1 className="text-3xl font-semibold text-slate-600 my-8">Profile</h1>
       </div>
 
-      <form className="flex flex-col gap-2">
+      <form className="flex flex-col gap-2" onSubmit={handleUpdateUser}>
         <div className="flex  justify-between flex-col md:flex-row gap-2">
           <div className="relative ">
             <input
@@ -114,7 +116,10 @@ const Profile = () => {
           </div>
         </div>
 
-        <button className="bg-emerald-600 rounded-md p-2 text-white hover:bg-emerald-700 hover:translate-y-1 duration-150 ease-in">
+        <button
+          type="submit"
+          className="bg-emerald-600 rounded-md p-2 text-white hover:bg-emerald-700 hover:translate-y-1 duration-150 ease-in"
+        >
           <>Update</>
         </button>
       </form>

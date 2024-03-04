@@ -60,7 +60,7 @@ const Navbar = () => {
 
           {user && user.verified ? (
             <>
-              {/* <button onClick={handleSignOut}>Sign Out</button> */}
+   
               <Dropdown
                 arrowIcon={false}
                 inline

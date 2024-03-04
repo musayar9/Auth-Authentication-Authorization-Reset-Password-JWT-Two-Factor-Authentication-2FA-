@@ -8,6 +8,7 @@ const {
   getUser,
   signOut,
   deleteUser,
+  updatedUser,
 } = require("../controllers/userController");
 const verifyToken = require("../utils/verifyToken");
 
@@ -21,5 +22,5 @@ router.put("/verifyupdate/:id", verifyUpdate);
 router.get("/:id", getUser);
 router.post("/signOut", signOut);
 router.delete("/delete/:id", verifyToken, deleteUser);
-
+router.put("/updateUser/:userId", verifyToken, updatedUser);
 module.exports = router;

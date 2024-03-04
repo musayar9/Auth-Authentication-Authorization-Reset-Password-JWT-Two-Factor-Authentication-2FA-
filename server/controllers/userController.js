@@ -135,6 +135,56 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const updatedUser = async (req, res, next) => {
+  const { username, surname, email } = req.body.formData;
+console.log(req.body)
+  const { id } = req.user;
+  const { userId } = req.params;
+
+  if (id !== userId) {
+    return next(errorHandler(400, "You can't update this user"));
+  }
+
+  if (req.body.password) {
+    const hashedPassword = bcryptjs.hashSync(req.body.password, 12);
+    req.body.password = hashedPassword;
+  }
+
+  if (username || surname) {
+    if (
+      username.length < 3 ||
+      surname.length < 3 ||
+      username.length > 14 ||
+      surname.length > 14
+    ) {
+      return next(
+        errorHandler(400, "Username and Surname must be 3 and 14 characters")
+      );
+    }
+  }
+
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        $set: {
+          username,
+          surname,
+          email,
+          password: req.body.password,
+        },
+      },
+      { new: true }
+    );
+
+    const { password, ...rest } = updatedUser._doc;
+
+    res.status(200).json(rest);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const signOut = async (req, res, next) => {
   try {
     res.clearCookie("token").status(200).json("Sign Outed ");
@@ -172,4 +222,5 @@ module.exports = {
   getUser,
   deleteUser,
   signOut,
+  updatedUser,
 };

@@ -8,7 +8,7 @@ const VerifyOtp = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  const { user,  } = useSelector((state) => state.user);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (otp !== "") {
@@ -19,10 +19,15 @@ const VerifyOtp = () => {
   };
 
   useEffect(() => {
+  
     if (user?.verified) {
       navigate("/");
     }
+    
+
   });
+
+
 
   return (
     <div className="mx-auto max-w-md mt-24">

@@ -47,13 +47,27 @@ export const signOut = createAsyncThunk("user/signOut", async () => {
   }
 });
 
+export const updateUser = createAsyncThunk(
+  "user/userUpdate",
+  async ({ id, formData }) => {
+    try {
+      const res = await axios.put(`/api/users/updateUser/${id}`, { formData });
+      const data = res.data;
+      console.log("data", data);
+      return data;
+    } catch (err) {
+      return err;
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
     user: null,
     userStatus: "idle",
     error: null,
-    deleteInformation:""
+    deleteInformation: "",
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -91,7 +105,7 @@ const userSlice = createSlice({
     builder.addCase(deleteUser.fulfilled, (state, action) => {
       state.userStatus = "success";
       state.user = null;
-      state.deleteInformation = action.payload
+      state.deleteInformation = action.payload;
     });
     builder.addCase(deleteUser.rejected, (state, action) => {
       state.userStatus = "failed";
@@ -112,6 +126,26 @@ const userSlice = createSlice({
       state.userStatus = "failed";
       state.error = action.payload.message;
     });
+    
+    
+    
+    //update user 
+    
+    builder.addCase(updateUser.pending,(state)=>{
+      state.userStatus="loading"
+    })
+    
+    
+    builder.addCase(updateUser.fulfilled,(state, action)=>{
+    state.userStatus= "success"
+    state.user = action.payload;
+    
+    })
+    
+    builder.addCase(updateUser.rejected, (state, action)=>{
+      state.userStatus ="failed";
+      state.error= action.payload
+    })
   },
 });
 
