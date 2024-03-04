@@ -95,7 +95,7 @@ const SignIn = () => {
         </div>
 
         <div className="text-sm  flex items-center pl-2 gap-2">
-          <input
+          <input className="border border-slate-500 outline-none text-emerald-600 rounded-sm focus:border-emerald-500"
             type="checkbox"
             onChange={() => setShowPassword(!showPassword)}
           />
