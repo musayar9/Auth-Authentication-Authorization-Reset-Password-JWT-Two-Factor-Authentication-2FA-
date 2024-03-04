@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { IoInformationOutline } from "react-icons/io5";
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [sendMessage, setSendMessage] = useState("");
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -30,6 +32,7 @@ const ResetPassword = () => {
       });
       setIsLoading(false);
       const data = res.data;
+      setSendMessage(res.data.message);
       if (res.status !== 200) {
         setError(true);
         setIsLoading(false);
@@ -46,6 +49,15 @@ const ResetPassword = () => {
 
   return (
     <div className="mx-auto max-w-md mt-24 gap-4 p-4">
+      {sendMessage && (
+        <div className="bg-[#007bff] text-gray-50 p-2 rounded-md">
+          <p className="flex  items-center justify-center ">
+            {" "}
+            <IoInformationOutline className="text-xl" />{" "}
+            <span className="text-sm">{sendMessage}</span>
+          </p>
+        </div>
+      )}
       <div className="flex flex-col items-center my-8 ">
         <h2 className="text-3xl font-bold text-slate-700">Password Reset</h2>
         <p className="mt-3 text-sm text-center text-slate-600">

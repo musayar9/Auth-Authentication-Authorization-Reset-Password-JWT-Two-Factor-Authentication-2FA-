@@ -10,6 +10,7 @@ const SignIn = () => {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const { user, userStatus, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -75,7 +76,7 @@ const SignIn = () => {
 
         <div className="relative ">
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             className="block px-2.5 pb-2.5 pt-4 w-full  text-sm
   text-gray-900 bg-transparent rounded-md border-1 border-gray-300 appearance-none dark:text-white
@@ -91,6 +92,14 @@ const SignIn = () => {
           >
             Password
           </label>
+        </div>
+
+        <div className="text-sm  flex items-center pl-2 gap-2">
+          <input
+            type="checkbox"
+            onChange={() => setShowPassword(!showPassword)}
+          />
+          <span className="text-slate-600">Show Password</span>
         </div>
 
         <button
@@ -134,7 +143,7 @@ const SignIn = () => {
           to="/reset-password"
           className=" text-xs text-blue-600 pl-2 underline hover:text-blue-700 "
         >
-          Forgot Password?
+          Forget Password?
         </Link>
         <p className="text-xs text-slate-500">
           Do You Have An Account?{" "}

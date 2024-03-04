@@ -25,7 +25,13 @@ const resetPassword = async (req, res, next) => {
     const url = `http://localhost:5173/reset-password/${user._id}/token/${token.token}`;
     await sendResetPassword(user, user.email, url);
 
-    res.status(200).json({message:"Check Your Email, Sent an email verification url", status:{token}, statusCode:200});
+    res
+      .status(200)
+      .json({
+        message: "Check your email address. Password change url sent",
+        status: { token },
+        statusCode: 200,
+      });
   } catch (err) {
     next(err);
   }
