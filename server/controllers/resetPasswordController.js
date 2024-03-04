@@ -12,7 +12,7 @@ const resetPassword = async (req, res, next) => {
 
   const user = await User.findOne({ email });
   console.log(user, "username");
-  if (user.email !== email) {
+  if (!user) {
     return next(errorHandler(401, "User not found"));
   }
 
@@ -25,7 +25,7 @@ const resetPassword = async (req, res, next) => {
     const url = `http://localhost:5173/reset-password/${user._id}/token/${token.token}`;
     await sendResetPassword(user, user.email, url);
 
-    res.status(200).json("send resetPassword Token");
+    res.status(200).json({message:"Check Your Email, Sent an email verification url", status:{token}, statusCode:200});
   } catch (err) {
     next(err);
   }

@@ -152,7 +152,7 @@ const SignUp = () => {
 
         <button className="bg-emerald-600 rounded-md p-2 text-white hover:bg-emerald-700 hover:translate-y-1 duration-150 ease-in">
           {loading ? (
-            <>
+            <div className="flex items-center justify-center gap-2">
               <div role="status">
                 <div>
                   <svg
@@ -174,7 +174,9 @@ const SignUp = () => {
                   <span className="sr-only">Loading...</span>
                 </div>
               </div>
-            </>
+
+              <p>Loading</p>
+            </div>
           ) : (
             <>Sign Up</>
           )}

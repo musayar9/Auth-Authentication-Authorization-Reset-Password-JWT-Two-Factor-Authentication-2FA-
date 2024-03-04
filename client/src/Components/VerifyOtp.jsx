@@ -28,7 +28,7 @@ const VerifyOtp = () => {
     if (user?.verified) {
       navigate("/");
     }
-  },);
+  });
 
   return (
     <>
