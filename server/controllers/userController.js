@@ -3,7 +3,7 @@ const errorHandler = require("../utils/errorHandler");
 const User = require("../models/userModel");
 const sendEmail = require("../utils/sendEmail");
 const jwt = require("jsonwebtoken");
-const oneTimePassword = require("../models/oneTimePasswordModel")
+const oneTimePassword = require("../models/oneTimePasswordModel");
 const getUsers = async (req, res, next) => {
   const user = await User.find({});
   try {
@@ -38,14 +38,14 @@ const signup = async (req, res, next) => {
 
 const signin = async (req, res, next) => {
   const { email, password } = req.body;
-  console.log("password login", password)
+  console.log("password login", password);
   if (!email || !password) {
     return next(errorHandler(400, "Please fill form"));
   }
 
   try {
     const isUser = await User.findOne({ email });
-console.log("isUser", isUser)
+    console.log("isUser", isUser);
     if (!isUser) {
       return next(errorHandler(400, "User not found"));
     }
@@ -57,24 +57,26 @@ console.log("isUser", isUser)
     const token = jwt.sign({ id: isUser._id }, process.env.JWT_SECRET_KEY);
 
     if (!isUser.verified) {
-      const otpValue = Math.floor(100000 + Math.random() * 900000).toString();
+      // const otpValue = Math.floor(100000 + Math.random() * 900000).toString();
 
-      isUser.otp = otpValue;
-      
+      // isUser.otp = otpValue;
+      // yeni eklendi
       const oneTimePass = await new oneTimePassword({
-        userId:isUser._id,
-        otp: Math.floor(100000 + Math.random() * 900000).toString()
-      }).save()
-console.log("oneTimePass", oneTimePass)
+        userId: isUser._id,
+        otp: Math.floor(100000 + Math.random() * 900000).toString(),
+      }).save();
+      console.log("oneTimePass", oneTimePass);
       await isUser.save();
-      await sendEmail(email, otpValue);
-      const { password: pass, otp, ...rest } = isUser._doc;
+      await sendEmail(email, oneTimePass.otp);
+      // const { password: pass, otp, ...rest } = isUser._doc;
+      const { password: pass, ...rest } = isUser._doc;
       return res
         .status(200)
         .cookie("token", token, { httpOnly: true })
         .json(rest);
     } else {
-      const { password: pass, otp, ...rest } = isUser._doc;
+      // const { password: pass, otp, ...rest } = isUser._doc;
+      const { password: pass, ...rest } = isUser._doc;
       return res
         .status(200)
         .cookie("token", token, { httpOnly: true })
@@ -106,7 +108,8 @@ const verifyOtp = async (req, res, next) => {
 const verifyUpdate = async (req, res, next) => {
   const { otp } = req.body;
 
-  const verifyUser = await User.findOne({ otp });
+  // const verifyUser = await User.findOne({ otp });
+  const verifyUser = await oneTimePassword.findOne({ otp });
 
   if (verifyUser?.otp !== otp) {
     return next(errorHandler(400, "Invalid Otp Check Your Email"));
@@ -119,7 +122,8 @@ const verifyUpdate = async (req, res, next) => {
       { new: true }
     );
 
-    const { password, otp, ...rest } = updateUser._doc;
+    // const { password, otp, ...rest } = updateUser._doc;
+    const { password, ...rest } = updateUser._doc;
     res.status(200).json(rest);
   } catch (err) {
     next(err);
@@ -143,7 +147,7 @@ const getUser = async (req, res, next) => {
 
 const updatedUser = async (req, res, next) => {
   const { username, surname, email } = req.body.formData;
-console.log(req.body)
+  console.log(req.body);
   const { id } = req.user;
   const { userId } = req.params;
 
@@ -192,8 +196,20 @@ console.log(req.body)
 };
 
 const signOut = async (req, res, next) => {
+  const { id } = req.params;
+
+  const isUser = await User.findByIdAndUpdate(
+    id,
+    {
+      $set: { verified: false },
+    },
+    { new: true }
+  );
+
+  await oneTimePassword.findOneAndDelete({ userId: id });
+
   try {
-    res.clearCookie("token").status(200).json("Sign Outed ");
+    res.clearCookie("token").status(200).json({ message: "Sign Out", isUser });
   } catch (err) {
     next(err);
   }

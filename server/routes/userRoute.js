@@ -20,7 +20,7 @@ router.post("/signin", signin);
 router.post("/verify", verifyOtp);
 router.put("/verifyupdate/:id", verifyUpdate);
 router.get("/:id", getUser);
-router.post("/signOut", signOut);
+router.post("/signOut/:id", signOut);
 router.delete("/delete/:id", verifyToken, deleteUser);
 router.put("/updateUser/:userId", verifyToken, updatedUser);
 module.exports = router;

@@ -9,7 +9,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    dispatch(signOut());
+    dispatch(signOut(user._id));
 
     navigate("/sign-in");
   };

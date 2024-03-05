@@ -35,9 +35,9 @@ export const deleteUser = createAsyncThunk("user/deleteUser", async (id) => {
   }
 });
 
-export const signOut = createAsyncThunk("user/signOut", async () => {
+export const signOut = createAsyncThunk("user/signOut", async (id) => {
   try {
-    const res = await axios.post(`/api/users/signOut`);
+    const res = await axios.post(`/api/users/signOut/${id}`);
     const data = res.data;
     console.log(data);
 
