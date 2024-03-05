@@ -1,7 +1,11 @@
 import { IoMdEyeOff } from "react-icons/io";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaEye } from "react-icons/fa";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 const ChangePassword = () => {
+  const { id, token } = useParams();
+
   const [password, setPassword] = useState({
     newPassword: "",
     newPasswordConfirm: "",
@@ -12,10 +16,38 @@ const ChangePassword = () => {
   const [newPasswordType, setNewPasswordType] = useState(false);
   const [newPasswordConfirmType, setNewPasswordConfirmType] = useState(false);
 
+  useEffect(() => {
+    const fetchUrl = async () => {
+      try {
+        const res = await axios.get(`/api/reset-password/${id}/token/${token}`);
+        const data = await res.data;
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchUrl();
+  }, [id, token]);
+
   const handleChangePassword = (e) => {
     const { name, value } = e.target;
 
     setPassword({ ...password, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.put(`/api/reset-password/${id}/token/${token}`, {
+        newPassword: password.newPassword,
+        newPasswordConfirm: password.newPasswordConfirm,
+      });
+      const data = await res.data;
+      console.log(data);
+    } catch (error) {
+      console.log(error, "change password");
+    }
   };
 
   return (
@@ -27,7 +59,7 @@ const ChangePassword = () => {
           Password must contain at least 6 characters
         </p>
       </div>
-      <form className="flex gap-4 flex-col flex-1 ">
+      <form className="flex gap-4 flex-col flex-1 " onSubmit={handleSubmit}>
         <div className="relative ">
           <div className="relative">
             <button
@@ -96,7 +128,10 @@ const ChangePassword = () => {
           </label>
         </div>
 
-        <button className="bg-emerald-600 hover:opacity-80 p-2 text-sm text-white rounded-md">
+        <button
+          type="submit"
+          className="bg-emerald-600 hover:opacity-80 p-2 text-sm text-white rounded-md"
+        >
           Submit
         </button>
       </form>

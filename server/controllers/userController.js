@@ -38,13 +38,14 @@ const signup = async (req, res, next) => {
 
 const signin = async (req, res, next) => {
   const { email, password } = req.body;
+  console.log("password login", password)
   if (!email || !password) {
     return next(errorHandler(400, "Please fill form"));
   }
 
   try {
     const isUser = await User.findOne({ email });
-
+console.log("isUser", isUser)
     if (!isUser) {
       return next(errorHandler(400, "User not found"));
     }
