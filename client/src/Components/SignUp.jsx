@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import RegisterSvg from "../assets/signUp.svg";
 import axios from "axios";
+import OAuth from "./OAuth";
 const SignUp = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -56,8 +57,8 @@ const SignUp = () => {
     }
   };
   return (
-    <div className="mx-auto max-w-md p-2">
-      <div className="flex items-center justify-center flex-col mt-12">
+    <div className="mx-auto max-w-md p-2 my-8">
+      <div className="flex items-center justify-center flex-col mt-5">
         <img
           src={RegisterSvg}
           className="shadow-lg drop-shadow-lg h-40 w-40 bg-emerald-400 p-5 rounded-full"
@@ -198,6 +199,13 @@ const SignUp = () => {
           <p className="text-md font-semibold">{errorMessage}</p>
         </div>
       )}
+
+      <div className="flex  items-center gap-2 mt-2">
+        <span className="border border-slate-400 flex-1  w-full"></span>
+        <p className="text-slate-800 text-sm">Or</p>
+        <span className="border border-slate-400 w-full flex-1"></span>
+      </div>
+      <OAuth />
     </div>
   );
 };

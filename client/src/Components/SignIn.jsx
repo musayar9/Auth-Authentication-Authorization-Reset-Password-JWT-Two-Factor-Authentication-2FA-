@@ -3,6 +3,7 @@ import loginSvg from "../assets/login.svg";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../redux/userSlice";
+import OAuth from "./OAuth";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -43,7 +44,7 @@ const SignIn = () => {
   }, [user]);
 
   return (
-    <div className="mx-auto max-w-md p-2 mt-12 ">
+    <div className="mx-auto max-w-md p-2 my-8 ">
       <div className="flex items-center justify-center flex-col">
         <img
           src={loginSvg}
@@ -95,7 +96,8 @@ const SignIn = () => {
         </div>
 
         <div className="text-sm  flex items-center pl-2 gap-2">
-          <input className="border border-slate-500 outline-none text-emerald-600 rounded-sm focus:border-emerald-500"
+          <input
+            className="border border-slate-500 outline-none text-emerald-600 rounded-sm focus:border-emerald-500"
             type="checkbox"
             onChange={() => setShowPassword(!showPassword)}
           />
@@ -164,6 +166,13 @@ const SignIn = () => {
           <p className="text-white">{errorMessage}</p>
         </div>
       )}
+
+      <div className="flex  items-center gap-2 mt-2">
+        <span className="border border-slate-400 flex-1  w-full"></span>
+        <p className="text-slate-800 text-sm">Or</p>
+        <span className="border border-slate-400 w-full flex-1"></span>
+      </div>
+      <OAuth />
     </div>
   );
 };

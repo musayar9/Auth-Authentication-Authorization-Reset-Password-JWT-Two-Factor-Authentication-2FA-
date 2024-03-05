@@ -37,52 +37,47 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
+const changePasswordGet = async (req, res, next) => {
+  const { userId, token } = req.params;
 
-const changePasswordGet = async(req, res, next)=>{
-    const { userId, token } = req.params;
-     
-        
-        
-        try{
-         const user = await User.findById(userId);
-         if (!user) {
-           return next(errorHandler(400, "User not found"));
-         }
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return next(errorHandler(400, "User not found"));
+    }
 
-         const resetToken = await PasswordToken.findOne({ userId, token });
+    const resetToken = await PasswordToken.findOne({ userId, token });
 
-         if (!resetToken) {
-           return next(errorHandler(400, "The provided token is invalid"));
-         }
-         
-         res.status(200).json({message:"Change Password"})
-        
-        }catch(err){next(err)}
-}
+    if (!resetToken) {
+      return next(errorHandler(400, "The provided token is invalid"));
+    }
 
+    res.status(200).json({ message: "Change Password" });
+  } catch (err) {
+    next(err);
+  }
+};
 
 const changePassword = async (req, res, next) => {
   console.log(req.params, "req.parmas");
   console.log(req.body, "req.body");
 
   const { userId, token } = req.params;
-   const { newPassword, newPasswordConfirm } = req.body;
+  const { newPassword, newPasswordConfirm } = req.body;
 
   const resetToken = await PasswordToken.findOne({ userId, token });
 
   if (!resetToken) {
-    return next(errorHandler(400, "The provided token is invalid"));
+    return next(errorHandler(401, "The provided token is invalid"));
   }
-
-
 
   if (newPassword !== newPasswordConfirm) {
     return next(errorHandler(400, "Passwords not match check it repeat"));
   }
 
   // const user = await User.findById(userId);
-  
-   const hashedPassword = bcryptjs.hashSync(newPassword, 12);
+
+  const hashedPassword = bcryptjs.hashSync(newPassword, 12);
 
   try {
     const updatePassword = await User.findByIdAndUpdate(
@@ -97,9 +92,12 @@ const changePassword = async (req, res, next) => {
 
     // user.password = newPassword;
     // await user.save();
-    res
-      .status(200)
-      .json({ statusCode: 200, message: "password change success", updatePassword });
+    await PasswordToken.findOneAndDelete({ token }).exec();
+    res.status(200).json({
+      statusCode: 200,
+      message: "password change success",
+      updatePassword,
+    });
   } catch (error) {
     next(error);
   }
