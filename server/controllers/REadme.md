@@ -1,9 +1,10 @@
+```js
 const bcryptjs = require("bcryptjs");
 const errorHandler = require("../utils/errorHandler");
 const User = require("../models/userModel");
 const sendEmail = require("../utils/sendEmail");
 const jwt = require("jsonwebtoken");
-const oneTimePassword = require("../models/oneTimePasswordModel")
+
 const getUsers = async (req, res, next) => {
   const user = await User.find({});
   try {
@@ -60,12 +61,7 @@ console.log("isUser", isUser)
       const otpValue = Math.floor(100000 + Math.random() * 900000).toString();
 
       isUser.otp = otpValue;
-      
-      const oneTimePass = await new oneTimePassword({
-        userId:isUser._id,
-        otp: Math.floor(100000 + Math.random() * 900000).toString()
-      }).save()
-console.log("oneTimePass", oneTimePass)
+
       await isUser.save();
       await sendEmail(email, otpValue);
       const { password: pass, otp, ...rest } = isUser._doc;
@@ -230,3 +226,5 @@ module.exports = {
   signOut,
   updatedUser,
 };
+
+```
