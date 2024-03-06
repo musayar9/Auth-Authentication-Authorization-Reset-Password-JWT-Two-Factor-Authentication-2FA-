@@ -3,12 +3,13 @@ const {
   getUsers,
   signup,
   signin,
-  verifyOtp,
+  deleteVerifyUser,
   verifyUpdate,
   getUser,
   signOut,
   deleteUser,
   updatedUser,
+  verifyUserOtp,
 } = require("../controllers/userController");
 const verifyToken = require("../utils/verifyToken");
 
@@ -17,10 +18,11 @@ const router = express.Router();
 router.get("/", getUsers);
 router.post("/signup", signup);
 router.post("/signin", signin);
-router.post("/verify", verifyOtp);
+router.put("/verifyUserOtp", verifyUserOtp);
 router.put("/verifyupdate/:id", verifyUpdate);
 router.get("/:id", getUser);
 router.post("/signOut/:id", signOut);
 router.delete("/delete/:id", verifyToken, deleteUser);
+router.delete("/deleteVerifyUser/:id", deleteVerifyUser);
 router.put("/updateUser/:userId", verifyToken, updatedUser);
 module.exports = router;

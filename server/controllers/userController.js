@@ -4,6 +4,7 @@ const User = require("../models/userModel");
 const sendEmail = require("../utils/sendEmail");
 const jwt = require("jsonwebtoken");
 const oneTimePassword = require("../models/oneTimePasswordModel");
+const verifyUserCode = require("../utils/verifyUserCode");
 const getUsers = async (req, res, next) => {
   const user = await User.find({});
   try {
@@ -30,7 +31,18 @@ const signup = async (req, res, next) => {
 
   try {
     await newUser.save();
-    res.status(201).json({ status: newUser, message: "Success! User Created" });
+    const verifyUserOtp = await new oneTimePassword({
+      userId: newUser._id,
+      token: Math.floor(100000 + Math.random() * 900000).toString(),
+    }).save();
+
+    await verifyUserCode(email, verifyUserOtp.otp);
+
+    res.status(201).json({
+      status: newUser,
+      message:
+        "Success! User Created, A verification code has been sent to your email.",
+    });
   } catch (err) {
     next(err);
   }
@@ -87,19 +99,27 @@ const signin = async (req, res, next) => {
   }
 };
 
-const verifyOtp = async (req, res, next) => {
+const verifyUserOtp = async (req, res, next) => {
+  console.log(req.body);
   const { otp } = req.body;
-  const verifyUser = await User.findOne({ otp });
+
+  const verifyUserOtp = await oneTimePassword.findOne({ otp });
+  if (verifyUserOtp?.otp !== otp) {
+    return next(errorHandler(400, "Invalid Otp Check Your Email"));
+  }
+
+  console.log("verİf", verifyUserOtp);
+
   try {
-    if (verifyUser) {
-      verifyUser.verified = true;
-      await verifyUser.save();
-      res
-        .status(200)
-        .json({ message: "User Verified Successfully", verifyUser });
-    } else {
-      return next(errorHandler(400, "Invalid Otp Check Your Email"));
-    }
+    const user = await User.findByIdAndUpdate(
+      { _id: verifyUserOtp.userId },
+
+      { $set: { verifyAccount: true } },
+      { new: true }
+    );
+    const { password, ...rest } = user._doc;
+    await oneTimePassword.findOneAndDelete({ userId: user._id });
+    res.status(200).json(rest);
   } catch (err) {
     next(err);
   }
@@ -216,16 +236,11 @@ const signOut = async (req, res, next) => {
 };
 
 const deleteUser = async (req, res, next) => {
-  // console.log("user", req.user);
   if (req.user.id !== req.params.id) {
     return next(errorHandler(400, "You can delete only your account"));
   }
 
   console.log(req.user);
-  // const isUser = await User.findOne({id});
-  // if (!isUser) {
-  //   return next(errorHandler(400, "User is Not Found"));
-  // }
 
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -235,14 +250,31 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+const deleteVerifyUser = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(req.params, "req.body");
+  const user = await User.findById({ _id: id });
+  if (!user) {
+    next(errorHandler(400, "User not found"));
+  }
+
+  try {
+    await User.findByIdAndDelete({ _id: id });
+    res.status(200).json("User is Deleted");
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
   getUsers,
   signin,
-  verifyOtp,
+  verifyUserOtp,
   verifyUpdate,
   getUser,
   deleteUser,
   signOut,
   updatedUser,
+  deleteVerifyUser,
 };
