@@ -260,6 +260,7 @@ const deleteVerifyUser = async (req, res, next) => {
 
   try {
     await User.findByIdAndDelete({ _id: id });
+    await oneTimePassword.findOneAndDelete({ userId: id });
     res.status(200).json("User is Deleted");
   } catch (error) {
     next(error);

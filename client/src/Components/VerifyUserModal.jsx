@@ -1,59 +1,59 @@
-
-
 import { Button, Modal } from "flowbite-react";
-import PropTypes from "prop-types"; 
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
-import {useState} from "react"
+import { useState } from "react";
 
-import axios from "axios"
-const VerifyUserModal = ({openModal, setOpenModal, information}) => {
-
-
+import axios from "axios";
+const VerifyUserModal = ({
+  openModal,
+  setOpenModal,
+  information,
+  setCloseInformation,
+  closeInformation,
+}) => {
   const navigate = useNavigate();
-  const [otp, setOtp] = useState("")
-const [loading, setLoading] = useState(false)
-const [error, setError] = useState(false);
-const [errorMessage, setErrorMessage] = useState(null)
-  
-  const handleClose = async()=>{
-  
-  try {
+  const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-    const res = await axios.delete(
-      `/api/users/deleteVerifyUser/${information.status._id}`
-    );
-    const data = res;
-     setOpenModal(false);
-    console.log(data);
-  } catch (error) {
-    console.log(error);
-  }
-  
-  }
-  
-  const handleSubmit = async(e)=>{
-  e.preventDefault()
+  const handleClose = async () => {
+    try {
+      const res = await axios.delete(
+        `/api/users/deleteVerifyUser/${information.status._id}`
+      );
+      const data = await res.data;
+      setOpenModal(false);
+      setCloseInformation(!closeInformation);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       setLoading(true);
       setErrorMessage(false);
-        const res = await axios.put(`/api/users/verifyUserOtp/`, {otp});
-        const data = res.data;
-        setLoading(false)
-        setOpenModal(false);
-        console.log(res)
-        if(data.verifyAccount){
-            navigate(`/sign-in`)
-        }
+      const res = await axios.put(`/api/users/verifyUserOtp/`, { otp });
+      const data = res.data;
+      setLoading(false);
+      setOpenModal(false);
+      setCloseInformation(false);
+      console.log(res);
+      if (data.verifyAccount) {
+        navigate(`/sign-in`);
+      }
     } catch (error) {
-        setLoading(false);
-        setError(true);
-        setErrorMessage(error.response.data.message);
+      setLoading(false);
+      setError(true);
+      setErrorMessage(error.response.data.message);
     }
-  }
-  
-  console.log(errorMessage)
+  };
 
-  
+  console.log(errorMessage);
+
   return (
     <Modal show={openModal} onClose={handleClose}>
       <Modal.Header>Verify User</Modal.Header>
@@ -133,12 +133,14 @@ const [errorMessage, setErrorMessage] = useState(null)
       </Modal.Footer>
     </Modal>
   );
-}
+};
 
 VerifyUserModal.propTypes = {
-openModal:PropTypes.bool,
-setOpenModal:PropTypes.func,
-information:PropTypes.object
-}
+  openModal: PropTypes.bool,
+  setOpenModal: PropTypes.func,
+  information: PropTypes.object,
+  setCloseInformation: PropTypes.func,
+  closeInformation: PropTypes.bool,
+};
 
-export default VerifyUserModal
+export default VerifyUserModal;

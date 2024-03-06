@@ -27,13 +27,8 @@ const SignUp = () => {
       }, 3000);
     }
     
-    if(information){
-    setTimeout(()=>{
-    setInformation(null)
-    setCloseInformation(false)
-    }, 3000)
-    }
-  }, [error, information]);
+
+  }, [error]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,7 +51,7 @@ const SignUp = () => {
         setErrorMessage(res.data.message);
       }
 
-      const data = res.data;
+      const data =await res.data;
     setInformation(data)
     setCloseInformation(true)
       setOpenModal(true);
@@ -212,13 +207,18 @@ const SignUp = () => {
           </Link>
         </div>
 
-        {information && (
+        {information && closeInformation && (
           <div className="bg-sky-800 rounded-md flex flex-col  p-4">
             <div className="flex justify-end -mt-2 -mr-2">
-            <button className="text-gray-50 hover:text-red-500" onClick={()=>{
-            setCloseInformation(!closeInformation);
-            setInformation(null)
-            }}><IoCloseCircleSharp /></button>
+              <button
+                className="text-gray-50 hover:text-red-500"
+                onClick={() => {
+                  setCloseInformation(!closeInformation);
+                  setInformation(null);
+                }}
+              >
+                <IoCloseCircleSharp />
+              </button>
             </div>
             <div className="flex items-center gap-2">
               <IoIosMail className="text-gray-50" />
@@ -247,6 +247,8 @@ const SignUp = () => {
         openModal={openModal}
         setOpenModal={setOpenModal}
         information={information}
+        closeInformation={closeInformation}
+        setCloseInformation={setCloseInformation}
       />
     </>
   );
