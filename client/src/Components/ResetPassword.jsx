@@ -126,6 +126,13 @@ const ResetPassword = () => {
         </button>
       </Link>
 
+      <div className="text-center">
+        <p className="text-slate-600 text-xs p-1">
+          Remember to check your spam folder or unblock softwarebkm@outlook.com
+          if you can't find the message.
+        </p>
+      </div>
+
       {error && (
         <div className="bg-red-500 text-white rounded-md p-2">
           <p>{errorMessage}</p>

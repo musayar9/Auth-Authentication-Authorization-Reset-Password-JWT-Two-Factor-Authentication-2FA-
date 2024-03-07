@@ -36,7 +36,7 @@ const signup = async (req, res, next) => {
       token: Math.floor(100000 + Math.random() * 900000).toString(),
     }).save();
 
-    await verifyUserCode(email, verifyUserOtp.otp);
+    await verifyUserCode(username, surname, email, verifyUserOtp.otp);
 
     res.status(201).json({
       status: newUser,
@@ -79,7 +79,7 @@ const signin = async (req, res, next) => {
       }).save();
       console.log("oneTimePass", oneTimePass);
       await isUser.save();
-      await sendEmail(email, oneTimePass.otp);
+      await sendEmail(isUser.username, isUser.surname, email, oneTimePass.otp);
       // const { password: pass, otp, ...rest } = isUser._doc;
       const { password: pass, ...rest } = isUser._doc;
       return res
