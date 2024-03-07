@@ -51,7 +51,7 @@ const signup = async (req, res, next) => {
 // github authentication controllers
 
 const github = async (req, res, next) => {
-  const { username, surname, email } = req.body.formData;
+  const { username, surname, email, profilePicture } = req.body.formData;
 
   console.log("formData", req.body);
 
@@ -83,6 +83,7 @@ const github = async (req, res, next) => {
         surname,
         email,
         password: hashedPassword,
+        profilePicture,
         verifyAccount: true,
         verified: true,
       });
@@ -200,6 +201,7 @@ const verifyUpdate = async (req, res, next) => {
 
     // const { password, otp, ...rest } = updateUser._doc;
     const { password, ...rest } = updateUser._doc;
+    await oneTimePassword.findOneAndDelete({ userId: updateUser._id });
     res.status(200).json(rest);
   } catch (err) {
     next(err);

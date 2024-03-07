@@ -3,25 +3,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../redux/userSlice";
 import { Dropdown, Avatar } from "flowbite-react";
-// import { getAuth } from "firebase/auth";
-// import { app } from "../firebase";
+import { getAuth } from "firebase/auth";
+import { app } from "../firebase";
 const Navbar = () => {
   const { user, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const authGithub = getAuth(app);
+  const authGithub = getAuth(app);
   const handleSignOut = () => {
     dispatch(signOut(user._id));
 
     navigate("/sign-in");
-    // authGithub.signOut().then(
-    //   function () {
-    //     console.log("Signout successful!");
-    //   },
-    //   function (error) {
-    //     console.log("Signout failed", error);
-    //   }
-    // );
+    authGithub.signOut().then(
+      function () {
+        console.log("Signout successful!");
+      },
+      function (error) {
+        console.log("Signout failed", error);
+      }
+    );
   };
 
   if (loading === "loading") {
@@ -73,7 +73,13 @@ const Navbar = () => {
               <Dropdown
                 arrowIcon={false}
                 inline
-                label={<Avatar alt="user" rounded />}
+                label={
+                  <Avatar
+                    alt="user"
+                    img={user?.profilePicture}
+                    rounded
+                  />
+                }
               >
                 <Dropdown.Header>
                   <span className="block text-sm text-blue-500">
