@@ -3,15 +3,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../redux/userSlice";
 import { Dropdown, Avatar } from "flowbite-react";
+// import { getAuth } from "firebase/auth";
+// import { app } from "../firebase";
 const Navbar = () => {
   const { user, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  // const authGithub = getAuth(app);
   const handleSignOut = () => {
     dispatch(signOut(user._id));
 
     navigate("/sign-in");
+    // authGithub.signOut().then(
+    //   function () {
+    //     console.log("Signout successful!");
+    //   },
+    //   function (error) {
+    //     console.log("Signout failed", error);
+    //   }
+    // );
   };
 
   if (loading === "loading") {
@@ -60,7 +70,6 @@ const Navbar = () => {
 
           {user && user.verified ? (
             <>
-   
               <Dropdown
                 arrowIcon={false}
                 inline

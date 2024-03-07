@@ -4,7 +4,7 @@ import axios from "axios";
 export const signIn = createAsyncThunk("user/signIn", async (formData) => {
   try {
     const res = await axios.post(`/api/users/signin`, formData);
-    const data = res.data;
+    const data =  res.data;
 
     return data;
   } catch (error) {
@@ -28,7 +28,7 @@ export const updateVerify = createAsyncThunk(
 export const deleteUser = createAsyncThunk("user/deleteUser", async (id) => {
   try {
     const res = await axios.delete(`/api/users/delete/${id}`);
-    const data = res;
+    const data = await res;
     return data;
   } catch (error) {
     return error;
@@ -38,7 +38,7 @@ export const deleteUser = createAsyncThunk("user/deleteUser", async (id) => {
 export const signOut = createAsyncThunk("user/signOut", async (id) => {
   try {
     const res = await axios.post(`/api/users/signOut/${id}`);
-    const data = res.data;
+    const data = await res.data;
     console.log(data);
 
     return data;
@@ -52,7 +52,7 @@ export const updateUser = createAsyncThunk(
   async ({ id, formData }) => {
     try {
       const res = await axios.put(`/api/users/updateUser/${id}`, { formData });
-      const data = res.data;
+      const data = await res.data;
       console.log("data", data);
       return data;
     } catch (err) {
@@ -60,6 +60,18 @@ export const updateUser = createAsyncThunk(
     }
   }
 );
+
+export const githubAuth = createAsyncThunk("user/github", async (formData) => {
+  try {
+    const res = await axios.post(`/api/users/github`, {formData});
+    const data =  res.data;
+    console.log(data, "github");
+    return data;
+  } catch (error) {
+    console.log("github", error);
+    return error;
+  }
+});
 
 const userSlice = createSlice({
   name: "user",
@@ -80,6 +92,19 @@ const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(signIn.rejected, (state, action) => {
+      state.userStatus = "failed";
+      state.error = action.error.message;
+    });
+
+    //git hub authenticate;
+    builder.addCase(githubAuth.pending, (state) => {
+      state.userStatus = "loading";
+    });
+    builder.addCase(githubAuth.fulfilled, (state, action) => {
+      state.userStatus = "success";
+      state.user = action.payload;
+    });
+    builder.addCase(githubAuth.rejected, (state, action) => {
       state.userStatus = "failed";
       state.error = action.error.message;
     });
@@ -126,26 +151,22 @@ const userSlice = createSlice({
       state.userStatus = "failed";
       state.error = action.payload.message;
     });
-    
-    
-    
-    //update user 
-    
-    builder.addCase(updateUser.pending,(state)=>{
-      state.userStatus="loading"
-    })
-    
-    
-    builder.addCase(updateUser.fulfilled,(state, action)=>{
-    state.userStatus= "success"
-    state.user = action.payload;
-    
-    })
-    
-    builder.addCase(updateUser.rejected, (state, action)=>{
-      state.userStatus ="failed";
-      state.error= action.payload
-    })
+
+    //update user
+
+    builder.addCase(updateUser.pending, (state) => {
+      state.userStatus = "loading";
+    });
+
+    builder.addCase(updateUser.fulfilled, (state, action) => {
+      state.userStatus = "success";
+      state.user = action.payload;
+    });
+
+    builder.addCase(updateUser.rejected, (state, action) => {
+      state.userStatus = "failed";
+      state.error = action.payload;
+    });
   },
 });
 

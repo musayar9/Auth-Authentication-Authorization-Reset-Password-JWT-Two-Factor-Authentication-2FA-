@@ -10,6 +10,7 @@ const {
   deleteUser,
   updatedUser,
   verifyUserOtp,
+  github,
 } = require("../controllers/userController");
 const verifyToken = require("../utils/verifyToken");
 
@@ -25,4 +26,5 @@ router.post("/signOut/:id", signOut);
 router.delete("/delete/:id", verifyToken, deleteUser);
 router.delete("/deleteVerifyUser/:id", deleteVerifyUser);
 router.put("/updateUser/:userId", verifyToken, updatedUser);
+router.post("/github", github)
 module.exports = router;
