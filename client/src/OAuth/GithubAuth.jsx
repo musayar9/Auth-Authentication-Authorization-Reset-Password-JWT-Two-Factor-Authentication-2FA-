@@ -1,17 +1,14 @@
-
-
 import { FaGithub } from "react-icons/fa";
 import { GithubAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
-import {  OAuthentication, githubAuth } from "../redux/userSlice";
+import { githubAuth } from "../redux/userSlice";
 import { useState } from "react";
 const GithubAuth = () => {
   const authGithub = getAuth(app);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-  
-  
+
   const dispatch = useDispatch();
   const handleClick = async () => {
     const provider = new GithubAuthProvider();
@@ -32,14 +29,15 @@ const GithubAuth = () => {
         email: resultsFromGithub.user.email,
         profilePicture: resultsFromGithub.user.photoURL,
       };
-        console.log(resultsFromGithub);
+      console.log(resultsFromGithub);
 
-      await dispatch(OAuthentication(data));
+      await dispatch(githubAuth(data));
     } catch (error) {
       setError(true);
       setErrorMessage(error);
     }
   };
+  console.log(errorMessage)
 
   return (
     <>
@@ -61,6 +59,6 @@ const GithubAuth = () => {
       )}
     </>
   );
-}
+};
 
-export default GithubAuth
+export default GithubAuth;

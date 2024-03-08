@@ -132,6 +132,8 @@ const oauth = async (req, res, next) => {
 
       res.status(200).cookie("token", token, { httpOnly: true }).json(rest);
     } else {
+
+    
       const generatePassword =
         Math.random().toString(36).slice(-10) +
         Math.random().toString(36).slice(-10);
