@@ -207,7 +207,7 @@ const SignUp = () => {
           </Link>
         </div>
 
-        {information && closeInformation && (
+        {closeInformation && (
           <div className="bg-sky-800 rounded-md flex flex-col  p-4">
             <div className="flex justify-end -mt-2 -mr-2">
               <button

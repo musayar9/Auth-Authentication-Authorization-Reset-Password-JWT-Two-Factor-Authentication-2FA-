@@ -120,7 +120,7 @@ const VerifyUserModal = ({
           </form>
 
           {error && (
-            <div className="bg-red-500 text-white rounded-md p-4">
+            <div className="bg-red-600 text-white rounded-md p-4">
               <p className="text-md font-semibold">{errorMessage}</p>
             </div>
           )}

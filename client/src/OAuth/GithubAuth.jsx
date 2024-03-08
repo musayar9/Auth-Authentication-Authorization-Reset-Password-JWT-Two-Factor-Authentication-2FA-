@@ -2,14 +2,15 @@ import { FaGithub } from "react-icons/fa";
 import { GithubAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase";
 import { useDispatch } from "react-redux";
-import { githubAuth } from "../redux/userSlice";
-import { useState } from "react";
-const GithubAuth = () => {
+import { OAuthentication } from "../redux/userSlice";
+import PropTypes from "prop-types";
+const GithubAuth = ({ setError, setErrorMessage }) => {
   const authGithub = getAuth(app);
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  // const [error, setError] = useState(false);
+  // const [errorMessage, setErrorMessage] = useState(null);
 
   const dispatch = useDispatch();
+
   const handleClick = async () => {
     const provider = new GithubAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
@@ -31,13 +32,12 @@ const GithubAuth = () => {
       };
       console.log(resultsFromGithub);
 
-      await dispatch(githubAuth(data));
+      await dispatch(OAuthentication(data));
     } catch (error) {
       setError(true);
-      setErrorMessage(error);
+      setErrorMessage(error.message);
     }
   };
-  console.log(errorMessage)
 
   return (
     <>
@@ -51,14 +51,12 @@ const GithubAuth = () => {
           Github
         </span>
       </button>
-
-      {error && (
-        <div className="bg-red-500 text-white rounded-md p-4">
-          <p className="text-md font-semibold">{errorMessage}</p>
-        </div>
-      )}
     </>
   );
+};
+GithubAuth.propTypes = {
+  setError: PropTypes.bool,
+  setErrorMessage: PropTypes.func,
 };
 
 export default GithubAuth;

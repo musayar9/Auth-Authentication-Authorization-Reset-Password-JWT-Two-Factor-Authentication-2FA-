@@ -12,11 +12,11 @@ const Navbar = () => {
   const authGithub = getAuth(app);
   const handleSignOut = () => {
     dispatch(signOut(user._id));
-
+    
     navigate("/sign-in");
     authGithub.signOut().then(
       function () {
-        console.log("Signout successful!");
+       navigate("/")
       },
       function (error) {
         console.log("Signout failed", error);
