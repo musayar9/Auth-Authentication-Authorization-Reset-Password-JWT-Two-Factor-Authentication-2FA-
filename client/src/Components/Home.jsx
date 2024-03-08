@@ -4,13 +4,13 @@ const Home = () => {
   const [show, setShow] = useState(false);
 
   return (
-    <div className="mx-auto max-w-4xl mt-24 p-8 mb-8 ">
+    <div className="mx-auto max-w-3xl  py-12 px-4 ">
       <div className="flex flex-col items-center gap-4">
         <div className="space-y-2">
-          <h2 className="font-bold text-2xl text-emerald-500 tracking-widest">
+          <h2 className="font-bold text-2xl text-zinc-700 tracking-widest">
             Two Factor Authentication - OTP
           </h2>
-          <p className="text-md indent-4 text-slate-600  tracking-widest">
+          <p className="text-md indent-4 text-zinc-600  font-semibold">
             A one-time password (OTP) is a valid password for a login or
             transaction on a computer system or other digital device. There is
             no shortage of parts in OTP, with the traditional (static) password
@@ -20,7 +20,7 @@ const Home = () => {
             such as a mobile phone, or filled with a PIN that only that person
             knows.
           </p>
-          <p className="text-md indent-4 text-slate-600  tracking-widest">
+          <p className="text-md indent-4 text-zinc-600  font-semibold">
             Multi-factor authentication (MFA) allows a computer user to
             successfully double or decrease part replacement rates. an
             authentication by which access is granted to provide further
@@ -33,7 +33,7 @@ const Home = () => {
             configuration using the configuration of the factor.
           </p>
 
-          <ul className="list-decimal pl-4 italic  text-slate-600 tracking-widest">
+          <ul className="list-decimal pl-4 italic  text-zinc-600 font-semibold">
             <li>User something known</li>
             <li>something the user has</li>
             <li>Something the user is.</li>
@@ -41,10 +41,10 @@ const Home = () => {
         </div>
 
         <div className="space-y-3">
-          <h2 className="font-bold text-2xl text-emerald-500 tracking-widest">
+          <h2 className="font-bold text-2xl text-zinc-700 ">
             What is JSON Web Token?
           </h2>
-          <p className="text-md indent-4 text-slate-600  tracking-widest">
+          <p className="text-md indent-4 text-zinc-600  font-semibold">
             JSON Web Token (JWT) is an open standard (RFC 7519) that defines a
             compact and self-contained way for securely transmitting information
             between parties as a JSON object. This information can be verified
@@ -59,12 +59,12 @@ const Home = () => {
             that signed it.
           </p>
           <div className="space-y-2">
-            <div className="flex justify-between items-cener">
-              <h3 className="text-xl font-bold text-emerald-500 tracking-widest">
+            <div className="flex justify-between items-center">
+              <h3 className="text-xl font-bold text-zinc-700">
                 When should you use JSON Web Tokens?
               </h3>
               <button
-                className="pr-2 text-slate-600"
+                className="pr-2 text-zinc-600"
                 onClick={() => setShow(!show)}
               >
                 {show ? <FaArrowUp /> : <FaArrowDown />}
@@ -72,11 +72,11 @@ const Home = () => {
             </div>
             {show && (
               <div className="space-y-3">
-                <h4 className="text-lg font-semibold text-emerald-500 tracking-widest">
+                <h4 className="text-lg font-semibold text-zinc-700 ">
                   Here are some scenarios where JSON Web Tokens are useful:
                 </h4>
-                <p className="text-slate-600 tracking-widest">
-                  <span className="font-semibold underline text-emerald-500">
+                <p className="text-slate-600 font-semibold">
+                  <span className="font-bold underline text-zinc-600">
                     Authorization:
                   </span>
                   This is the most common scenario for using JWT. Once the user
@@ -87,8 +87,8 @@ const Home = () => {
                   overhead and its ability to be easily used across different
                   domains.
                 </p>
-                <p className="text-slate-600 tracking-widest">
-                  <span className="font-semibold underline  text-emerald-500">
+                <p className="text-zinc-600 font-semibold">
+                  <span className="font-bold underline  text-zinc-600">
                     {" "}
                     Information Exchange:
                   </span>
