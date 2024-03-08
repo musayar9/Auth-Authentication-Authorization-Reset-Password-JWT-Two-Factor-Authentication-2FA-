@@ -73,6 +73,18 @@ export const githubAuth = createAsyncThunk("user/github", async (formData) => {
   }
 });
 
+
+export const OAuthentication = createAsyncThunk("user/oauth", async (formData) => {
+  try {
+    const res = await axios.post(`/api/users/oauth`, {formData});
+    const data =  res.data;
+    console.log(data, "oauth");
+    return data;
+  } catch (error) {
+    console.log("github", error);
+    return error;
+  }
+});
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -105,6 +117,22 @@ const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(githubAuth.rejected, (state, action) => {
+      state.userStatus = "failed";
+      state.error = action.error.message;
+    });
+
+
+
+//google and github authentication;
+
+    builder.addCase(OAuthentication.pending, (state) => {
+      state.userStatus = "loading";
+    });
+    builder.addCase(OAuthentication.fulfilled, (state, action) => {
+      state.userStatus = "success";
+      state.user = action.payload;
+    });
+    builder.addCase(OAuthentication.rejected, (state, action) => {
       state.userStatus = "failed";
       state.error = action.error.message;
     });

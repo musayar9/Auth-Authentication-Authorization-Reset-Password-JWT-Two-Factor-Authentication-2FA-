@@ -105,6 +105,65 @@ const github = async (req, res, next) => {
   }
 };
 
+// github and google oAuth
+
+const oauth = async (req, res, next) => {
+  const { username, surname, email, profilePicture } = req.body.formData;
+
+  console.log("formData", req.body);
+
+  try {
+    const user = await User.findOne({ email });
+    
+    
+    if (user) {
+      const token = jwt.sign(
+        { id: user._id, isAdmin: user.isAdmin },
+        process.env.JWT_SECRET_KEY
+      );
+
+      const oneTimePass = await new oneTimePassword({
+        userId: user._id,
+        otp: Math.floor(100000 + Math.random() * 900000).toString(),
+      }).save();
+      await sendEmail(username, surname, email, oneTimePass.otp);
+
+      const { password, ...rest } = user._doc;
+
+      res.status(200).cookie("token", token, { httpOnly: true }).json(rest);
+    } else {
+      const generatePassword =
+        Math.random().toString(36).slice(-10) +
+        Math.random().toString(36).slice(-10);
+      const hashedPassword = bcryptjs.hashSync(generatePassword, 12);
+
+      const oauthUser = new User({
+        username,
+        surname,
+        email,
+        password: hashedPassword,
+        profilePicture,
+        verifyAccount: true,
+        verified: true,
+      });
+
+      await oauthUser.save();
+      const token = jwt.sign(
+        {
+          id: oauthUser._id,
+          isAdmin: oauthUser.isAdmin,
+        },
+        process.env.JWT_SECRET_KEY
+      );
+      const { password, ...rest } = oauthUser._doc;
+
+      res.status(200).cookie("token", token, { httpOnly: true }).json(rest);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 const signin = async (req, res, next) => {
   const { email, password } = req.body;
   console.log("password login", password);
@@ -337,4 +396,5 @@ module.exports = {
   updatedUser,
   deleteVerifyUser,
   github,
+  oauth,
 };
