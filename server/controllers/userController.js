@@ -114,8 +114,7 @@ const oauth = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email });
-    
-    
+
     if (user) {
       const token = jwt.sign(
         { id: user._id, isAdmin: user.isAdmin },
@@ -132,8 +131,6 @@ const oauth = async (req, res, next) => {
 
       res.status(200).cookie("token", token, { httpOnly: true }).json(rest);
     } else {
-
-    
       const generatePassword =
         Math.random().toString(36).slice(-10) +
         Math.random().toString(36).slice(-10);
@@ -380,7 +377,13 @@ const deleteVerifyUser = async (req, res, next) => {
   try {
     await User.findByIdAndDelete({ _id: id });
     await oneTimePassword.findOneAndDelete({ userId: id });
-    res.status(200).json("User is Deleted");
+    res
+      .status(200)
+      .json({
+        message:
+          "Registration was not completed because the account was not verified",
+        status: 200,
+      });
   } catch (error) {
     next(error);
   }

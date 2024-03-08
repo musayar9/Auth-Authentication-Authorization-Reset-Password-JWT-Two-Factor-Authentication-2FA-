@@ -39,7 +39,7 @@ const ResetPassword = () => {
         setErrorMessage("Something went wrong");
       }
 
-      console.log(res);
+  
       return data;
     } catch (error) {
       setError(true);

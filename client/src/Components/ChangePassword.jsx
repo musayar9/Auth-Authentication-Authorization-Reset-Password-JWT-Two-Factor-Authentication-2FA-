@@ -33,7 +33,7 @@ const ChangePassword = () => {
         const data = await res.data;
         setError(false);
         setIsLoading(false)
-       console.log(data)
+          return data
       } catch (error) {
         setError(true);
         setIsLoading(false);
@@ -83,9 +83,9 @@ if(submitError){
       setLoading(false)
       
      navigate("/sign-in")
-     console.log(data);
+     return data
     } catch (error) {
-      console.log(error, "change password");
+
       setSubmitError(true)
       setLoading(true)
       setSubmitErrorMessage(error)

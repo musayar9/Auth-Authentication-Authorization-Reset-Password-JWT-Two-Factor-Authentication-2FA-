@@ -6,8 +6,7 @@ import { OAuthentication } from "../redux/userSlice";
 import PropTypes from "prop-types";
 const GithubAuth = ({ setError, setErrorMessage }) => {
   const authGithub = getAuth(app);
-  // const [error, setError] = useState(false);
-  // const [errorMessage, setErrorMessage] = useState(null);
+
 
   const dispatch = useDispatch();
 
@@ -55,7 +54,7 @@ const GithubAuth = ({ setError, setErrorMessage }) => {
   );
 };
 GithubAuth.propTypes = {
-  setError: PropTypes.bool,
+  setError: PropTypes.func,
   setErrorMessage: PropTypes.func,
 };
 

@@ -6,6 +6,7 @@ import OAuth from "./OAuth";
 import VerifyUserModal from "./VerifyUserModal";
 import { IoIosMail } from "react-icons/io";
 import { IoCloseCircleSharp } from "react-icons/io5";
+import { IoIosWarning } from "react-icons/io";
 const SignUp = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -17,18 +18,23 @@ const SignUp = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const [information, setInformation] = useState(null)
-  const [closeInformation, setCloseInformation]=useState(false)
- useEffect(() => {
+  const [information, setInformation] = useState(null);
+  const [closeInformation, setCloseInformation] = useState(false);
+  const [warning, setWarning] = useState(null);
+  useEffect(() => {
     if (error) {
       setTimeout(() => {
         setError(false);
         setLoading(false);
       }, 3000);
     }
-    
 
-  }, [error]);
+    if (warning !== null) {
+      setTimeout(() => {
+        setWarning(null);
+      }, 3000);
+    }
+  }, [error, warning]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,15 +51,15 @@ const SignUp = () => {
         formData,
       });
       setLoading(false);
-      console.log(res);
+
       if (res.status !== 201) {
         setError(true);
         setErrorMessage(res.data.message);
       }
 
-      const data =await res.data;
-    setInformation(data)
-    setCloseInformation(true)
+      const data = await res.data;
+      setInformation(data);
+      setCloseInformation(true);
       setOpenModal(true);
       setFormData({ username: "", surname: "", email: "", password: "" });
 
@@ -64,7 +70,6 @@ const SignUp = () => {
       setErrorMessage(error.message);
     }
   };
-  
 
   return (
     <>
@@ -229,6 +234,13 @@ const SignUp = () => {
           </div>
         )}
 
+        {warning && (
+          <div className="bg-orange-500 text-white rounded-md gap-2 p-3 flex items-center">
+            <IoIosWarning />
+            <p className="text-xs font-semibold">{warning}</p>
+          </div>
+        )}
+
         {error && (
           <div className="bg-red-500 text-white rounded-md p-4">
             <p className="text-md font-semibold">{errorMessage}</p>
@@ -249,6 +261,9 @@ const SignUp = () => {
         information={information}
         closeInformation={closeInformation}
         setCloseInformation={setCloseInformation}
+        setErrorStatus={setError}
+        setErrorStatusMessage={setErrorMessage}
+        setWarning={setWarning}
       />
     </>
   );

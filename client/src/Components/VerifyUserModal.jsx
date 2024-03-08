@@ -10,6 +10,9 @@ const VerifyUserModal = ({
   information,
   setCloseInformation,
   closeInformation,
+  setErrorStatus,
+  setErrorStatusMessage,
+  setWarning,
 }) => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState("");
@@ -25,9 +28,10 @@ const VerifyUserModal = ({
       const data = await res.data;
       setOpenModal(false);
       setCloseInformation(!closeInformation);
-      console.log(data);
+      setWarning(data.message);
     } catch (error) {
-      console.log(error);
+      setErrorStatus(true);
+      setErrorStatusMessage(error);
     }
   };
 
@@ -52,7 +56,7 @@ const VerifyUserModal = ({
     }
   };
 
-  console.log(errorMessage);
+
 
   return (
     <Modal show={openModal} onClose={handleClose}>
@@ -141,6 +145,9 @@ VerifyUserModal.propTypes = {
   information: PropTypes.object,
   setCloseInformation: PropTypes.func,
   closeInformation: PropTypes.bool,
+  setErrorStatus: PropTypes.func,
+  setErrorStatusMessage: PropTypes.func,
+  setWarning: PropTypes.func,
 };
 
 export default VerifyUserModal;

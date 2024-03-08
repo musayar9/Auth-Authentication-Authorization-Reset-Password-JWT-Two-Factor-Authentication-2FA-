@@ -10,12 +10,13 @@ const VerifyOtp = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const [errorStatus, setErrorStatus] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null)
   const handleSubmit = (e) => {
     e.preventDefault();
     if (otp !== "") {
       dispatch(updateVerify({ id, otp: otp }));
     } else {
-      console.log("opt dğeri griniz");
+      setErrorMessage("opt is required")
     }
   };
 
@@ -81,6 +82,12 @@ const VerifyOtp = () => {
             Send Verify
           </button>
         </form>
+
+        {errorMessage && (
+          <div className="bg-red-600 rounded-md p-2">
+            <p className="text-white">{errorMessage}</p>
+          </div>
+        )}
       </div>
     </>
   );

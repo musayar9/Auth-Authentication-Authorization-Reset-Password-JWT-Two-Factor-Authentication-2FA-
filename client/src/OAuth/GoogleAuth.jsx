@@ -43,7 +43,7 @@ const GoogleAuth = ({ setError, setErrorMessage }) => {
   );
 };
 GoogleAuth.propTypes = {
-  setError: PropTypes.bool,
+  setError: PropTypes.func,
   setErrorMessage: PropTypes.func,
 };
 
