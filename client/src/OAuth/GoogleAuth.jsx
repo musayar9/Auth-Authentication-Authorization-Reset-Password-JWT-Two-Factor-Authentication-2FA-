@@ -12,7 +12,7 @@ const GoogleAuth = ({ setError, setErrorMessage }) => {
     provider.setCustomParameters({ prompt: "select_account" });
     try {
       const resultsFromGoogle = await signInWithPopup(authGoogle, provider);
-      console.log("googleAuth", resultsFromGoogle);
+
       const data = {
         username: resultsFromGoogle._tokenResponse.firstName,
         surname: resultsFromGoogle._tokenResponse.lastName,

@@ -16,7 +16,7 @@ const getUsers = async (req, res, next) => {
 
 const signup = async (req, res, next) => {
   const { username, surname, email, password } = req.body.formData;
-  console.log(req.body);
+
   if (!username || !surname || !email || !password) {
     return next(errorHandler(401, "Please fill full form!"));
   }
@@ -52,9 +52,6 @@ const signup = async (req, res, next) => {
 
 const github = async (req, res, next) => {
   const { username, surname, email, profilePicture } = req.body.formData;
-
-  console.log("formData", req.body);
-
   try {
     const user = await User.findOne({ email });
     if (user) {
@@ -110,7 +107,7 @@ const github = async (req, res, next) => {
 const oauth = async (req, res, next) => {
   const { username, surname, email, profilePicture } = req.body.formData;
 
-  console.log("formData", req.body);
+
 
   try {
     const user = await User.findOne({ email });
@@ -165,14 +162,14 @@ const oauth = async (req, res, next) => {
 
 const signin = async (req, res, next) => {
   const { email, password } = req.body;
-  console.log("password login", password);
+
   if (!email || !password) {
     return next(errorHandler(400, "Please fill form"));
   }
 
   try {
     const isUser = await User.findOne({ email });
-    console.log("isUser", isUser);
+
     if (!isUser) {
       return next(errorHandler(400, "User not found"));
     }
@@ -184,25 +181,22 @@ const signin = async (req, res, next) => {
     const token = jwt.sign({ id: isUser._id }, process.env.JWT_SECRET_KEY);
 
     if (!isUser.verified) {
-      // const otpValue = Math.floor(100000 + Math.random() * 900000).toString();
-
-      // isUser.otp = otpValue;
-      // yeni eklendi
+   
       const oneTimePass = await new oneTimePassword({
         userId: isUser._id,
         otp: Math.floor(100000 + Math.random() * 900000).toString(),
       }).save();
-      console.log("oneTimePass", oneTimePass);
+
       await isUser.save();
       await sendEmail(isUser.username, isUser.surname, email, oneTimePass.otp);
-      // const { password: pass, otp, ...rest } = isUser._doc;
+
       const { password: pass, ...rest } = isUser._doc;
       return res
         .status(200)
         .cookie("token", token, { httpOnly: true })
         .json(rest);
     } else {
-      // const { password: pass, otp, ...rest } = isUser._doc;
+
       const { password: pass, ...rest } = isUser._doc;
       return res
         .status(200)
@@ -215,15 +209,13 @@ const signin = async (req, res, next) => {
 };
 
 const verifyUserOtp = async (req, res, next) => {
-  console.log(req.body);
+
   const { otp } = req.body;
 
   const verifyUserOtp = await oneTimePassword.findOne({ otp });
   if (verifyUserOtp?.otp !== otp) {
     return next(errorHandler(400, "Invalid Otp Check Your Email"));
   }
-
-  console.log("verİf", verifyUserOtp);
 
   try {
     const user = await User.findByIdAndUpdate(
@@ -243,7 +235,6 @@ const verifyUserOtp = async (req, res, next) => {
 const verifyUpdate = async (req, res, next) => {
   const { otp } = req.body;
 
-  // const verifyUser = await User.findOne({ otp });
   const verifyUser = await oneTimePassword.findOne({ otp });
 
   if (verifyUser?.otp !== otp) {
@@ -257,7 +248,6 @@ const verifyUpdate = async (req, res, next) => {
       { new: true }
     );
 
-    // const { password, otp, ...rest } = updateUser._doc;
     const { password, ...rest } = updateUser._doc;
     await oneTimePassword.findOneAndDelete({ userId: updateUser._id });
     res.status(200).json(rest);
@@ -283,7 +273,6 @@ const getUser = async (req, res, next) => {
 
 const updatedUser = async (req, res, next) => {
   const { username, surname, email } = req.body.formData;
-  console.log(req.body);
   const { id } = req.user;
   const { userId } = req.params;
 
@@ -356,8 +345,6 @@ const deleteUser = async (req, res, next) => {
     return next(errorHandler(400, "You can delete only your account"));
   }
 
-  console.log(req.user);
-
   try {
     await User.findByIdAndDelete(req.params.id);
     res.status(200).clearCookie("token").json("User is Deleted");
@@ -368,7 +355,6 @@ const deleteUser = async (req, res, next) => {
 
 const deleteVerifyUser = async (req, res, next) => {
   const { id } = req.params;
-  console.log(req.params, "req.body");
   const user = await User.findById({ _id: id });
   if (!user) {
     next(errorHandler(400, "User not found"));

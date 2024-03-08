@@ -29,7 +29,7 @@ const GithubAuth = ({ setError, setErrorMessage }) => {
         email: resultsFromGithub.user.email,
         profilePicture: resultsFromGithub.user.photoURL,
       };
-      console.log(resultsFromGithub);
+
 
       await dispatch(OAuthentication(data));
     } catch (error) {

@@ -39,7 +39,7 @@ export const signOut = createAsyncThunk("user/signOut", async (id) => {
   try {
     const res = await axios.post(`/api/users/signOut/${id}`);
     const data = await res.data;
-    console.log(data);
+  
 
     return data;
   } catch (err) {
@@ -53,7 +53,7 @@ export const updateUser = createAsyncThunk(
     try {
       const res = await axios.put(`/api/users/updateUser/${id}`, { formData });
       const data = await res.data;
-      console.log("data", data);
+
       return data;
     } catch (err) {
       return err;
@@ -65,10 +65,10 @@ export const githubAuth = createAsyncThunk("user/github", async (formData) => {
   try {
     const res = await axios.post(`/api/users/github`, {formData});
     const data =  res.data;
-    console.log(data, "github");
+
     return data;
   } catch (error) {
-    console.log("github", error);
+
     return error;
   }
 });
@@ -78,10 +78,10 @@ export const OAuthentication = createAsyncThunk("user/oauth", async (formData) =
   try {
     const res = await axios.post(`/api/users/oauth`, {formData});
     const data =  res.data;
-    console.log(data, "oauth");
+
     return data;
   } catch (error) {
-    console.log("github", error);
+
     return error;
   }
 });

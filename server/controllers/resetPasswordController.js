@@ -13,7 +13,7 @@ const resetPassword = async (req, res, next) => {
   }
 
   const user = await User.findOne({ email });
-  console.log(user, "username");
+
   if (!user) {
     return next(errorHandler(401, "User not found"));
   }
@@ -23,7 +23,7 @@ const resetPassword = async (req, res, next) => {
       userId: user._id,
       token: crypto.randomBytes(32).toString("hex"),
     }).save();
-    console.log("toek", token);
+  
     const url = `http://localhost:5173/reset-password/${user._id}/token/${token.token}`;
     await sendResetPassword(user, user.email, url);
 
@@ -59,9 +59,6 @@ const changePasswordGet = async (req, res, next) => {
 };
 
 const changePassword = async (req, res, next) => {
-  console.log(req.params, "req.parmas");
-  console.log(req.body, "req.body");
-
   const { userId, token } = req.params;
   const { newPassword, newPasswordConfirm } = req.body;
 
@@ -74,8 +71,6 @@ const changePassword = async (req, res, next) => {
   if (newPassword !== newPasswordConfirm) {
     return next(errorHandler(400, "Passwords not match check it repeat"));
   }
-
-  // const user = await User.findById(userId);
 
   const hashedPassword = bcryptjs.hashSync(newPassword, 12);
 
@@ -90,8 +85,6 @@ const changePassword = async (req, res, next) => {
       { new: true }
     );
 
-    // user.password = newPassword;
-    // await user.save();
     await PasswordToken.findOneAndDelete({ token }).exec();
     res.status(200).json({
       statusCode: 200,

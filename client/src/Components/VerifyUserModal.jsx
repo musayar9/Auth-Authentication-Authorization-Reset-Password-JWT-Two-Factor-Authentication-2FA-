@@ -45,7 +45,7 @@ const VerifyUserModal = ({
       setLoading(false);
       setOpenModal(false);
       setCloseInformation(false);
-      console.log(res);
+  
       if (data.verifyAccount) {
         navigate(`/sign-in`);
       }
