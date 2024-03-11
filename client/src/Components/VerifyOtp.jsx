@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateVerify } from "../redux/userSlice";
 import ErrorMessage from "../utils/ErrorMessage";
-
+import { MdError } from "react-icons/md";
 const VerifyOtp = () => {
   const [otp, setOtp] = useState("");
   const { id } = useParams();
@@ -34,7 +34,10 @@ const VerifyOtp = () => {
   });
 
   if (errorStatus) {
-    return <h2>Something went wrong</h2>;
+    return <div className="flex  items-center justify-center my-10">
+    <MdError/>
+    <p className="text-3xl font-bold text-red-700 ">Something Went Wrong</p>
+    </div>;
   }
 
   return (

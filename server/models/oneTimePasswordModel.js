@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-const crypto = require("crypto");
+
+// creating a one-time password
+
 const oneTimePasswordModel = mongoose.Schema(
   {
     userId: {

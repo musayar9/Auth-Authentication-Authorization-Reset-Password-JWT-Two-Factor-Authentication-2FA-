@@ -1,5 +1,8 @@
 const nodemailer = require("nodemailer");
 
+
+// verify user email
+
 const verifyUserCode = async (username, surname, email, otp) => {
   try {
     const transporter = nodemailer.createTransport({

@@ -1,5 +1,7 @@
 const nodemailer = require("nodemailer");
 
+
+// two factor authentication
 const sendEmail = async (username,surname,email, otp) => {
   try {
     const transporter = nodemailer.createTransport({

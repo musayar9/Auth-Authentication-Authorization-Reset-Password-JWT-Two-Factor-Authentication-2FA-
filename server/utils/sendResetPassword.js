@@ -1,5 +1,7 @@
 const nodemailer = require("nodemailer");
 
+
+// reset-password email
 const sendResetPassword = async (user, email, url) => {
   try {
     const transporter = nodemailer.createTransport({

@@ -5,7 +5,8 @@ const sendEmail = require("../utils/sendEmail");
 const jwt = require("jsonwebtoken");
 const oneTimePassword = require("../models/oneTimePasswordModel");
 const verifyUserCode = require("../utils/verifyUserCode");
-const crypto = require("crypto");
+
+// get all users
 const getUsers = async (req, res, next) => {
   const user = await User.find({});
   try {
@@ -99,7 +100,10 @@ const oauth = async (req, res, next) => {
       We determine the validity period of the cookie with expires.*/
       res
         .status(200)
-        .cookie("token", token, { httpOnly: true, expires: new Date(Date.now() + 2 * 3600000) }) // 2hour
+        .cookie("token", token, {
+          httpOnly: true,
+          expires: new Date(Date.now() + 2 * 3600000),
+        }) // 2hour
         .json(rest);
     } else {
       /*If there is no user, we generate a random number consisting of 20 characters. 
@@ -148,96 +152,119 @@ const oauth = async (req, res, next) => {
 const signin = async (req, res, next) => {
   const { email, password } = req.body;
 
+  //controls email and password
   if (!email || !password) {
     return next(errorHandler(400, "Please fill form"));
   }
 
+  //User filtering by email address
   try {
     const isUser = await User.findOne({ email });
 
+    //user controllers
     if (!isUser) {
       return next(errorHandler(400, "Registered email address not found"));
     }
+    // Password hashing with bcryptjs
     const validPassword = bcryptjs.compareSync(password, isUser.password);
     if (!validPassword) {
       return next(errorHandler(400, "Invalid Password"));
     }
 
+    // create token
     const token = jwt.sign({ id: isUser._id }, process.env.JWT_SECRET_KEY);
 
-    if (!isUser.verified) {
-      const oneTimePass = await new oneTimePassword({
-        userId: isUser._id,
-        otp: Math.floor(100000 + Math.random() * 900000).toString(),
-      }).save();
+    //two-factor authentication processes
+    const oneTimePass = await new oneTimePassword({
+      userId: isUser._id,
+      otp: Math.floor(100000 + Math.random() * 900000).toString(),
+    }).save();
+    await sendEmail(isUser.username, isUser.surname, email, oneTimePass.otp);
 
-      await isUser.save();
-      await sendEmail(isUser.username, isUser.surname, email, oneTimePass.otp);
-
-      const { password: pass, ...rest } = isUser._doc;
-      return res
-        .status(200)
-        .cookie("token", token, { httpOnly: true })
-        .json(rest);
-    } else {
-      const { password: pass, ...rest } = isUser._doc;
-      return res
-        .status(200)
-        .cookie("token", token, { httpOnly: true })
-        .json(rest);
-    }
+    // Extract password from user data
+    const { password: pass, ...rest } = isUser._doc;
+    return res
+      .status(200)
+      .cookie("token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + 2 * 3600000),
+      })
+      .json(rest);
   } catch (error) {
     next(error);
   }
 };
 
+/*Account verification processes with the code sent to verify the user account */
 const verifyUserOtp = async (req, res, next) => {
+  // Get OTP from request body
   const { otp } = req.body;
 
+  // Find the OTP record
   const verifyUserOtp = await oneTimePassword.findOne({ otp });
+  //otp controller
   if (verifyUserOtp?.otp !== otp) {
     return next(errorHandler(400, "Invalid Otp Check Your Email"));
   }
 
   try {
+    /*If the OTP value sent to the user matches with one of the users in the User model, 
+    then that user's account will be verified. */
     const user = await User.findByIdAndUpdate(
       { _id: verifyUserOtp.userId },
 
       { $set: { verifyAccount: true } },
       { new: true }
     );
+
+    // Extract password from user data
     const { password, ...rest } = user._doc;
+
+    // Delete the OTP record
     await oneTimePassword.findOneAndDelete({ userId: user._id });
+
+    // Send user data without password in response
     res.status(200).json(rest);
   } catch (err) {
     next(err);
   }
 };
 
+/*Two-factor authentication processes that will take place after you log in */
 const verifyUpdate = async (req, res, next) => {
+  // Get OTP from request body
   const { otp } = req.body;
 
+  // Find the OTP record
   const verifyUser = await oneTimePassword.findOne({ otp });
 
+  // If OTP is invalid, return error
   if (verifyUser?.otp !== otp) {
     return next(errorHandler(400, "Invalid Otp Check Your Email"));
   }
 
   try {
+    // Update user's verified status to true
     const updateUser = await User.findByIdAndUpdate(
       req.params.id,
       { $set: { verified: true } },
       { new: true }
     );
 
+    // Extract password from user data
     const { password, ...rest } = updateUser._doc;
+
+    // Delete the OTP record
     await oneTimePassword.findOneAndDelete({ userId: updateUser._id });
+
+    // Send user data without password in response
     res.status(200).json(rest);
   } catch (err) {
     next(err);
   }
 };
 
+/* Getting user based on ID value obtained from parameters*/
 const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
@@ -252,21 +279,28 @@ const getUser = async (req, res, next) => {
     next(err);
   }
 };
-
+/*user update operations */
 const updatedUser = async (req, res, next) => {
+  //data from body
   const { username, surname, email } = req.body.formData;
+
+  // Data from jwt result (user authorization)
   const { id } = req.user;
+  //data from params
   const { userId } = req.params;
 
+  //user controls
   if (id !== userId) {
     return next(errorHandler(400, "You can't update this user"));
   }
 
+  // hashing the updated password
   if (req.body.password) {
     const hashedPassword = bcryptjs.hashSync(req.body.password, 12);
     req.body.password = hashedPassword;
   }
 
+  // username and surname controls
   if (username || surname) {
     if (
       username.length < 3 ||
@@ -281,6 +315,7 @@ const updatedUser = async (req, res, next) => {
   }
 
   try {
+    /*Update the specified fields based on the user ID */
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
@@ -302,9 +337,11 @@ const updatedUser = async (req, res, next) => {
   }
 };
 
+/*User logout process. */
 const signOut = async (req, res, next) => {
+  // Get user ID from request parameters
   const { id } = req.params;
-
+  // Update user's verified status to false
   const isUser = await User.findByIdAndUpdate(
     id,
     {
@@ -312,39 +349,54 @@ const signOut = async (req, res, next) => {
     },
     { new: true }
   );
-
+  // Delete the corresponding one-time password record
   await oneTimePassword.findOneAndDelete({ userId: id });
 
   try {
+    // Clear the JWT token cookie and send success response
     res.clearCookie("token").status(200).json({ message: "Sign Out", isUser });
   } catch (err) {
     next(err);
   }
 };
 
+/*User deletion process. */
 const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(400, "You can delete only your account"));
   }
 
   try {
+    // Delete user from the database
     await User.findByIdAndDelete(req.params.id);
+    // Clear the JWT token cookie and send success response
     res.status(200).clearCookie("token").json("User is Deleted");
   } catch (error) {
     next(error);
   }
 };
 
+/**Deletion of users who haven't confirmed their accounts from the database. */
 const deleteVerifyUser = async (req, res, next) => {
+  // Get user ID from request parameters
   const { id } = req.params;
+
+  // Find user by ID
   const user = await User.findById({ _id: id });
+
+  // If user not found, return error
   if (!user) {
     next(errorHandler(400, "User not found"));
   }
 
   try {
+    // Delete user from the database
     await User.findByIdAndDelete({ _id: id });
+
+    // Delete corresponding one-time password record
     await oneTimePassword.findOneAndDelete({ userId: id });
+
+    // Send success response
     res.status(200).json({
       message:
         "Registration was not completed because the account was not verified",

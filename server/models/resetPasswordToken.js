@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const crypto = require("crypto");
 
+//  create password token
+
 const resetPasswordToken = mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
