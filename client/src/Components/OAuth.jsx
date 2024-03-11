@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import GithubAuth from "../OAuth/GithubAuth";
 
 import GoogleAuth from "../OAuth/GoogleAuth";
+import ErrorMessage from "../utils/ErrorMessage";
 const OAuth = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -21,9 +22,7 @@ const OAuth = () => {
         <GithubAuth setError={setError} setErrorMessage={setErrorMessage} />
       </div>
       {error && (
-        <div className="bg-red-600 text-xs text-white rounded-md p-4 mt-3">
-          <p className="text-md font-semibold">{errorMessage}</p>
-        </div>
+        <ErrorMessage message={errorMessage}/>
       )}
     </>
   );

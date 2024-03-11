@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import axios from "axios";
+import ErrorMessage from "../utils/ErrorMessage";
 const VerifyUserModal = ({
   openModal,
   setOpenModal,
@@ -45,7 +46,7 @@ const VerifyUserModal = ({
       setLoading(false);
       setOpenModal(false);
       setCloseInformation(false);
-  
+
       if (data.verifyAccount) {
         navigate(`/sign-in`);
       }
@@ -55,8 +56,6 @@ const VerifyUserModal = ({
       setErrorMessage(error.response.data.message);
     }
   };
-
-
 
   return (
     <Modal show={openModal} onClose={handleClose}>
@@ -123,11 +122,7 @@ const VerifyUserModal = ({
             </button>
           </form>
 
-          {error && (
-            <div className="bg-red-600 text-white rounded-md p-4">
-              <p className="text-md font-semibold">{errorMessage}</p>
-            </div>
-          )}
+          {error && <ErrorMessage message={errorMessage} />}
         </div>
       </Modal.Body>
       <Modal.Footer>

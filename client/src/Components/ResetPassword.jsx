@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { IoInformationOutline } from "react-icons/io5";
+import ErrorMessage from "../utils/ErrorMessage";
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -134,9 +135,7 @@ const ResetPassword = () => {
       </div>
 
       {error && (
-        <div className="bg-red-500 text-white rounded-md p-2">
-          <p>{errorMessage}</p>
-        </div>
+       <ErrorMessage message={errorMessage}/>
       )}
     </div>
   );

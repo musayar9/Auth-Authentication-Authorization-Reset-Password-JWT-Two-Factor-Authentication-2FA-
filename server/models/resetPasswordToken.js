@@ -13,7 +13,7 @@ const resetPasswordToken = mongoose.Schema({
     required: true,
     index: true,
     unique: true,
-    default: () => crypto.randomBytes(20).toString(hex),
+    default: () => crypto.randomBytes(20).toString("hex"),
   },
 });
 

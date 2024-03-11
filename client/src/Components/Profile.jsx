@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteUser, updateUser } from "../redux/userSlice";
+import ErrorMessage from "../utils/ErrorMessage";
 
 const Profile = () => {
  const { user, userStatus } = useSelector((state) => state.user);
@@ -139,9 +140,8 @@ const Profile = () => {
         </div>
       )}
       {userStatus === "failed" && (
-        <div className="text-red-600 p-2 rounded-md">
-          <p className="text-white">Something went wrong</p>
-        </div>
+       
+        <ErrorMessage message={"something went wrong"}/>
       )}
     </div>
   );

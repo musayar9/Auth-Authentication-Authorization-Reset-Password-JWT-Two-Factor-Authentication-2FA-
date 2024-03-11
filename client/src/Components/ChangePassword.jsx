@@ -3,27 +3,27 @@ import { useState, useEffect } from "react";
 import { FaEye } from "react-icons/fa";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import Error from "./Error"
+import Error from "./Error";
 import Loading from "./Loading";
+import ErrorMessage from "../utils/ErrorMessage";
 const ChangePassword = () => {
   const { id, token } = useParams();
 
   const [password, setPassword] = useState({
     newPassword: "",
     newPasswordConfirm: "",
-  })
+  });
   const [newPasswordType, setNewPasswordType] = useState(false);
   const [newPasswordConfirmType, setNewPasswordConfirmType] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
-  
-  
+
   // password gönderilirken gelecek olan hatalrın kontolü
-  const [loading, setLoading] = useState(false)
-  const [submitError, setSubmitError] = useState(false)
-  const [submitErrorMessage, setSubmitErrorMessage] = useState({})
-  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
+  const [submitErrorMessage, setSubmitErrorMessage] = useState({});
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchUrl = async () => {
       try {
@@ -32,8 +32,8 @@ const ChangePassword = () => {
         const res = await axios.get(`/api/reset-password/${id}/token/${token}`);
         const data = await res.data;
         setError(false);
-        setIsLoading(false)
-          return data
+        setIsLoading(false);
+        return data;
       } catch (error) {
         setError(true);
         setIsLoading(false);
@@ -44,25 +44,23 @@ const ChangePassword = () => {
     fetchUrl();
   }, [id, token]);
 
-
-useEffect(()=>{
-if(submitError){
-  setTimeout(()=>{
-  setSubmitError(false);
-  setLoading(false);
-  setSubmitErrorMessage(null)
-  setPassword({newPassword:"", newPasswordConfirm:""})
-  
-  },3000)
-}
-},[submitError])
+  useEffect(() => {
+    if (submitError) {
+      setTimeout(() => {
+        setSubmitError(false);
+        setLoading(false);
+        setSubmitErrorMessage(null);
+        setPassword({ newPassword: "", newPasswordConfirm: "" });
+      }, 3000);
+    }
+  }, [submitError]);
 
   if (isLoading) {
-    return <Loading/>
+    return <Loading />;
   }
 
   if (error) {
-    return <Error errorMessage={errorMessage}/>
+    return <Error errorMessage={errorMessage} />;
   }
   const handleChangePassword = (e) => {
     const { name, value } = e.target;
@@ -73,22 +71,22 @@ if(submitError){
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-    setLoading(true)
-    setSubmitError(false);
+      setLoading(true);
+      setSubmitError(false);
       const res = await axios.put(`/api/reset-password/${id}/token/${token}`, {
         newPassword: password.newPassword,
         newPasswordConfirm: password.newPasswordConfirm,
       });
       const data = await res.data;
-      setLoading(false)
-      
-     navigate("/sign-in")
-     return data
-    } catch (error) {
+      setLoading(false);
 
-      setSubmitError(true)
-      setLoading(true)
-      setSubmitErrorMessage(error)
+      navigate("/sign-in");
+      return data;
+    } catch (error) {
+      setSubmitError(true);
+      setLoading(true);
+      setSubmitErrorMessage(error.response.data.message);
+      console.log("error", error);
     }
   };
 
@@ -205,14 +203,10 @@ if(submitError){
           )}
         </button>
       </form>
-      
-      
+
       {submitError && (
-        <div className="bg-red-700 text-white rounded-md p-4 mt-2">
-          <p className="text-sm font-semibold">{submitErrorMessage.response.data.message}</p>
-        </div>
+        <ErrorMessage message={submitErrorMessage}/>
       )}
-      
     </div>
   );
 };

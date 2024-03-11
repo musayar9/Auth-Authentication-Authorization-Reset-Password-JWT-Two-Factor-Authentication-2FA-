@@ -64,10 +64,7 @@ const Navbar = () => {
           )}
         </div>
         <div className=" ">
-          {/* <button className="px-2   rounded-md">
-            <Link className="">Register</Link>
-          </button> */}
-
+   
           {user && user.verified ? (
             <>
               <Dropdown

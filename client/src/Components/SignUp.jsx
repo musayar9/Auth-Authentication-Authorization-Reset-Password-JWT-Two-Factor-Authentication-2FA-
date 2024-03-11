@@ -7,6 +7,7 @@ import VerifyUserModal from "./VerifyUserModal";
 import { IoIosMail } from "react-icons/io";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import { IoIosWarning } from "react-icons/io";
+import ErrorMessage from "../utils/ErrorMessage";
 const SignUp = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -242,9 +243,8 @@ const SignUp = () => {
         )}
 
         {error && (
-          <div className="bg-red-500 text-white rounded-md p-4">
-            <p className="text-md font-semibold">{errorMessage}</p>
-          </div>
+      
+          <ErrorMessage message={errorMessage}/>
         )}
 
         <div className="flex  items-center gap-2 mt-2">

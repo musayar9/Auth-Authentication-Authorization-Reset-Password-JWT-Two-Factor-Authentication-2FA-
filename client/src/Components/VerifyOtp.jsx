@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { updateVerify } from "../redux/userSlice";
+import ErrorMessage from "../utils/ErrorMessage";
+
 const VerifyOtp = () => {
   const [otp, setOtp] = useState("");
   const { id } = useParams();
@@ -10,13 +12,13 @@ const VerifyOtp = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const [errorStatus, setErrorStatus] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (otp !== "") {
       dispatch(updateVerify({ id, otp: otp }));
     } else {
-      setErrorMessage("opt is required")
+      setErrorMessage("opt is required");
     }
   };
 
@@ -31,13 +33,12 @@ const VerifyOtp = () => {
     }
   });
 
+  if (errorStatus) {
+    return <h2>Something went wrong</h2>;
+  }
+
   return (
     <>
-      {errorStatus && (
-        <div>
-          <p>Id Undefined Check Your Code</p>
-        </div>
-      )}
       <div className="mx-auto max-w-md mt-24">
         <div className="flex flex-col items-center justify-center ">
           <img
@@ -84,9 +85,7 @@ const VerifyOtp = () => {
         </form>
 
         {errorMessage && (
-          <div className="bg-red-600 rounded-md p-2">
-            <p className="text-white">{errorMessage}</p>
-          </div>
+          <ErrorMessage message={errorMessage}/>
         )}
       </div>
     </>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../redux/userSlice";
 import OAuth from "./OAuth";
+import ErrorMessage from "../utils/ErrorMessage";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({
@@ -161,11 +162,7 @@ const SignIn = () => {
         </div>
       )}
 
-      {errorMessage && (
-        <div className="bg-red-600 rounded-md p-2">
-          <p className="text-white">{errorMessage}</p>
-        </div>
-      )}
+      {errorMessage && <ErrorMessage message={errorMessage} />}
 
       <div className="flex  items-center gap-2 mt-2">
         <span className="border border-slate-400 flex-1  w-full"></span>
