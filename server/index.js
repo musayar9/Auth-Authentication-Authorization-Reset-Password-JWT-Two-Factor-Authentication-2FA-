@@ -5,12 +5,10 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/userRoute");
 const resetRoutes = require("./routes/resetPasswordRoute");
-const path = require("path")
+const path = require("path");
 dotenv.config();
 
 const app = express();
-
-
 
 mongoose
   .connect(process.env.MONGO)
@@ -21,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-const __dirname = path.resolve()
+const __dirname = path.resolve();
 
 app.use(express.static(path.join(__dirname, "/client/dist")));
 
