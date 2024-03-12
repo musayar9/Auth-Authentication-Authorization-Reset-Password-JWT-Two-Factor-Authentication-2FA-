@@ -61,6 +61,7 @@ const VerifyUserModal = ({
       setTimeout(() => {
         setError(false);
         setErrorMessage(null);
+        setOtp("")
       }, 4000);
     }
   };
