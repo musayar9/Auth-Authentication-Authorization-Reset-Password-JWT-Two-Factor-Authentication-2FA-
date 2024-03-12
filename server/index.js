@@ -19,18 +19,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-const __dirname = path.resolve();
-
+path.resolve();
 
 app.use("/api/users", userRoutes);
 app.use("/api/reset-password", resetRoutes);
 app.listen(5000, () => {
   console.log(`Server listening on port ${5000}`);
 });
-app.use(express.static(path.join(__dirname, "/client/dist")));
+app.use(express.static(path.join(path.resolve(), "/client/dist")));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+  res.sendFile(path.join(path.resolve(), "client", "dist", "index.html"));
 });
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;
