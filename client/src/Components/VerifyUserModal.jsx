@@ -30,6 +30,8 @@ const VerifyUserModal = ({
       setOpenModal(false);
       setCloseInformation(!closeInformation);
       setWarning(data.message);
+      setError(false);
+      setErrorMessage(null);
     } catch (error) {
       setErrorStatus(true);
       setErrorStatusMessage(error);
@@ -38,9 +40,10 @@ const VerifyUserModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       setLoading(true);
-      setErrorMessage(false);
+      setError(false);
       const res = await axios.put(`/api/users/verifyUserOtp/`, { otp });
       const data = res.data;
       setLoading(false);
@@ -54,6 +57,11 @@ const VerifyUserModal = ({
       setLoading(false);
       setError(true);
       setErrorMessage(error.response.data.message);
+
+      setTimeout(() => {
+        setError(false);
+        setErrorMessage(null);
+      }, 4000);
     }
   };
 

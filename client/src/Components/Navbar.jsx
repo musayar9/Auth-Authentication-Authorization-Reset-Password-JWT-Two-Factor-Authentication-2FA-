@@ -10,8 +10,8 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const authGithub = getAuth(app);
-  const handleSignOut = () => {
-    dispatch(signOut(user._id));
+  const handleSignOut = async() => {
+   await  dispatch(signOut(user._id));
     
     navigate("/sign-in");
     authGithub.signOut().then(
