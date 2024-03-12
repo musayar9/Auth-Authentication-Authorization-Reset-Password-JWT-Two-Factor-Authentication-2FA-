@@ -32,6 +32,7 @@ const VerifyUserModal = ({
       setWarning(data.message);
       setError(false);
       setErrorMessage(null);
+      setOtp("");
     } catch (error) {
       setErrorStatus(true);
       setErrorStatusMessage(error);
@@ -61,7 +62,7 @@ const VerifyUserModal = ({
       setTimeout(() => {
         setError(false);
         setErrorMessage(null);
-        setOtp("")
+        setOtp("");
       }, 4000);
     }
   };
