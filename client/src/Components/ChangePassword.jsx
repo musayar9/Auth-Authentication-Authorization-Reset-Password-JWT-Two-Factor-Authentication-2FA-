@@ -51,7 +51,7 @@ const ChangePassword = () => {
         setLoading(false);
         setSubmitErrorMessage(null);
         setPassword({ newPassword: "", newPasswordConfirm: "" });
-      }, 3000);
+      }, 4000);
     }
   }, [submitError]);
 

@@ -4,7 +4,7 @@ import axios from "axios";
 export const signIn = createAsyncThunk("user/signIn", async (formData) => {
   try {
     const res = await axios.post(`/api/users/signin`, formData);
-    const data =  res.data;
+    const data = res.data;
 
     return data;
   } catch (error) {
@@ -39,7 +39,6 @@ export const signOut = createAsyncThunk("user/signOut", async (id) => {
   try {
     const res = await axios.post(`/api/users/signOut/${id}`);
     const data = await res.data;
-  
 
     return data;
   } catch (err) {
@@ -63,28 +62,28 @@ export const updateUser = createAsyncThunk(
 
 export const githubAuth = createAsyncThunk("user/github", async (formData) => {
   try {
-    const res = await axios.post(`/api/users/github`, {formData});
-    const data =  res.data;
+    const res = await axios.post(`/api/users/github`, { formData });
+    const data = res.data;
 
     return data;
   } catch (error) {
-
     return error;
   }
 });
 
+export const OAuthentication = createAsyncThunk(
+  "user/oauth",
+  async (formData) => {
+    try {
+      const res = await axios.post(`/api/users/oauth`, { formData });
+      const data = res.data;
 
-export const OAuthentication = createAsyncThunk("user/oauth", async (formData) => {
-  try {
-    const res = await axios.post(`/api/users/oauth`, {formData});
-    const data =  res.data;
-
-    return data;
-  } catch (error) {
-
-    return error;
+      return data;
+    } catch (error) {
+      return error;
+    }
   }
-});
+);
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -121,9 +120,7 @@ const userSlice = createSlice({
       state.error = action.error.message;
     });
 
-
-
-//google and github authentication;
+    //google and github authentication;
 
     builder.addCase(OAuthentication.pending, (state) => {
       state.userStatus = "loading";

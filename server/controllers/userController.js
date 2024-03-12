@@ -282,7 +282,7 @@ const getUser = async (req, res, next) => {
 /*user update operations */
 const updatedUser = async (req, res, next) => {
   //data from body
-  const { username, surname, email } = req.body.formData;
+  const { username, surname, email, profilePicture } = req.body.formData;
 
   // Data from jwt result (user authorization)
   const { id } = req.user;
@@ -301,15 +301,21 @@ const updatedUser = async (req, res, next) => {
   }
 
   // username and surname controls
-  if (username || surname) {
+  if (username) {
     if (
-      username.length < 3 ||
-      surname.length < 3 ||
-      username.length > 14 ||
-      surname.length > 14
+      username.length < 3 || username.length > 14 || username===""
+   
     ) {
       return next(
-        errorHandler(400, "Username and Surname must be 3 and 14 characters")
+        errorHandler(400, "Username must be 3 and 14 characters")
+      );
+    }
+  }
+  
+  if (surname) {
+    if (surname.length < 3 || surname.length > 14 || surname==="") {
+      return next(
+        errorHandler(400, "Surname must be 3 and 14 characters")
       );
     }
   }
@@ -324,6 +330,7 @@ const updatedUser = async (req, res, next) => {
           surname,
           email,
           password: req.body.password,
+          profilePicture
         },
       },
       { new: true }

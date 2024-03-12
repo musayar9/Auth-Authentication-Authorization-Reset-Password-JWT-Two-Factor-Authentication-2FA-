@@ -18,7 +18,7 @@ const ResetPassword = () => {
 
         setIsLoading(false);
       }
-    }, 3000);
+    }, 4000);
   }, [error]);
 
   const handleResetPassword = async (e) => {

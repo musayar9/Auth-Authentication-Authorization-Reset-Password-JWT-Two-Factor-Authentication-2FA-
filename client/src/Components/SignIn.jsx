@@ -14,7 +14,7 @@ const SignIn = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { user, userStatus, error } = useSelector((state) => state.user);
+  const { user, userStatus } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -40,9 +40,14 @@ const SignIn = () => {
       setErrorMessage(user?.response?.data?.message);
       setTimeout(() => {
         setErrorMessage("");
-      }, 3000);
+      }, 4000);
+      return;
     }
   }, [user]);
+
+  {
+    userStatus === "failed" && <ErrorMessage message={errorMessage} />;
+  }
 
   return (
     <div className="mx-auto max-w-md p-2 my-8 ">
@@ -155,12 +160,6 @@ const SignIn = () => {
           </Link>
         </p>
       </div>
-
-      {userStatus === "failed" && (
-        <div>
-          <p>{error}</p>
-        </div>
-      )}
 
       {errorMessage && <ErrorMessage message={errorMessage} />}
 

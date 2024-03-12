@@ -27,13 +27,13 @@ const SignUp = () => {
       setTimeout(() => {
         setError(false);
         setLoading(false);
-      }, 3000);
+      }, 4000);
     }
 
     if (warning !== null) {
       setTimeout(() => {
         setWarning(null);
-      }, 3000);
+      }, 4000);
     }
   }, [error, warning]);
 
