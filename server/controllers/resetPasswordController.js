@@ -6,8 +6,6 @@ const crypto = require("crypto");
 
 const bcryptjs = require("bcryptjs");
 
-
-
 /*Password reset operations based on the incoming email address */
 const resetPassword = async (req, res, next) => {
   const { email } = req.body;
@@ -33,11 +31,11 @@ const resetPassword = async (req, res, next) => {
     }).save();
 
     // Construct password reset URL
-    const url = `http://localhost:5173/reset-password/${user._id}/token/${token.token}`;
+    const url = `https://two-factor-authetication-jwt.onrender.com/reset-password/${user._id}/token/${token.token}`;
 
     // Send password reset email
     await sendResetPassword(user, user.email, url);
-    
+
     // Send success response
     res.status(200).json({
       message: "Check your email address. Password change url sent",
@@ -104,7 +102,7 @@ const changePassword = async (req, res, next) => {
     );
     // Delete the reset token from the database
     await PasswordToken.findOneAndDelete({ token }).exec();
-    
+
     // Send success response
     res.status(200).json({
       statusCode: 200,
