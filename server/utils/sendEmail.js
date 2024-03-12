@@ -1,8 +1,7 @@
 const nodemailer = require("nodemailer");
 
-
 // two factor authentication
-const sendEmail = async (username,surname,email, otp) => {
+const sendEmail = async (username, surname, email, otp) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "hotmail",
@@ -114,8 +113,8 @@ const sendEmail = async (username,surname,email, otp) => {
           font-size: 0.8rem;
         }
         .code {
-         
-          letter-spacing: 0.5em;
+           padding: 12px 24px;
+          letter-spacing: 0.2em;
         }
 
         footer h4 {

@@ -115,8 +115,8 @@ const verifyUserCode = async (username, surname, email, otp) => {
           font-size: 0.8rem;
         }
         .code {
-         
-          letter-spacing: 0.5em;
+          padding: 12px 24px;
+          letter-spacing: 0.3em;
         }
 
         footer h4 {

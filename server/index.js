@@ -21,18 +21,17 @@ app.use(cors());
 
 const __dirname = path.resolve();
 
-app.use(express.static(path.join(__dirname, "/client/dist")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-});
 
 app.use("/api/users", userRoutes);
 app.use("/api/reset-password", resetRoutes);
 app.listen(5000, () => {
   console.log(`Server listening on port ${5000}`);
 });
+app.use(express.static(path.join(__dirname, "/client/dist")));
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;
   const message = error.message || "Internal Server Error";
