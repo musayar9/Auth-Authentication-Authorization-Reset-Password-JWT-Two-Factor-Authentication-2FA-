@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateVerify } from "../redux/userSlice";
 import ErrorMessage from "../utils/ErrorMessage";
 import { MdError } from "react-icons/md";
+import {Helmet} from "react-helmet"
 const VerifyOtp = () => {
   const [otp, setOtp] = useState("");
   const { id } = useParams();
@@ -42,6 +43,11 @@ const VerifyOtp = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Verify Otp</title>
+        <meta name="description" content="Verify Otp" />
+      </Helmet>
+
       <div className="mx-auto max-w-md mt-24">
         <div className="flex flex-col items-center justify-center ">
           <img
@@ -87,9 +93,7 @@ const VerifyOtp = () => {
           </button>
         </form>
 
-        {errorMessage && (
-          <ErrorMessage message={errorMessage}/>
-        )}
+        {errorMessage && <ErrorMessage message={errorMessage} />}
       </div>
     </>
   );

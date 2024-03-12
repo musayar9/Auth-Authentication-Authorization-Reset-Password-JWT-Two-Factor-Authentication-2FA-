@@ -8,6 +8,7 @@ import { IoIosMail } from "react-icons/io";
 import { IoCloseCircleSharp } from "react-icons/io5";
 import { IoIosWarning } from "react-icons/io";
 import ErrorMessage from "../utils/ErrorMessage";
+import { Helmet } from "react-helmet";
 const SignUp = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -74,6 +75,10 @@ const SignUp = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Sing Uo</title>
+        <meta name="description" content="Sing Up" />
+      </Helmet>
       <div className="mx-auto max-w-md p-2 my-8">
         <div className="flex items-center justify-center flex-col mt-5">
           <img
@@ -195,7 +200,7 @@ const SignUp = () => {
                   </div>
                 </div>
 
-                <p>Redirecting...</p>
+                <p className="text-xs">Redirecting...</p>
               </div>
             ) : (
               <>Sign Up</>
@@ -242,10 +247,7 @@ const SignUp = () => {
           </div>
         )}
 
-        {error && (
-      
-          <ErrorMessage message={errorMessage}/>
-        )}
+        {error && <ErrorMessage message={errorMessage} />}
 
         <div className="flex  items-center gap-2 mt-2">
           <span className="border border-slate-400 flex-1  w-full"></span>
