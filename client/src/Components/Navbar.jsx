@@ -3,26 +3,25 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "../redux/userSlice";
 import { Dropdown, Avatar } from "flowbite-react";
-import { getAuth } from "firebase/auth";
+import { GithubAuthProvider, getAuth } from "firebase/auth";
 import { app } from "../firebase";
 const Navbar = () => {
   const { user, loading } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const authGithub = getAuth(app);
-  const handleSignOut = async() => {
-   await  dispatch(signOut(user._id));
-    
+  const auth = getAuth(app);
+const handleSignOut = async () => {
+  await dispatch(signOut(user._id)); 
+
+  const provider = new GithubAuthProvider();
+  try {
+    await signOut(auth, provider); 
     navigate("/sign-in");
-    authGithub.signOut().then(
-      function () {
-       navigate("/")
-      },
-      function (error) {
-        console.log("Signout failed", error);
-      }
-    );
-  };
+  } catch (error) {
+    console.log("Signout failed", error);
+  }
+};
+
 
   if (loading === "loading") {
     <p>logging out...</p>;
