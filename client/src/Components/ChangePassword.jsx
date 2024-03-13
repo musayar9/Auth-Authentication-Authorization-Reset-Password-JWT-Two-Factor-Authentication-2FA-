@@ -6,7 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import Error from "./Error";
 import Loading from "./Loading";
 import ErrorMessage from "../utils/ErrorMessage";
-import {Helmet} from "react-helmet"
+import { Helmet } from "react-helmet";
 const ChangePassword = () => {
   const { id, token } = useParams();
 
@@ -204,7 +204,7 @@ const ChangePassword = () => {
                   </div>
                 </div>
 
-                <p>Loading</p>
+                <p className="text-xs">Password is being changed...</p>
               </div>
             ) : (
               <>Submit</>

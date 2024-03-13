@@ -31,7 +31,7 @@ const resetPassword = async (req, res, next) => {
     }).save();
 
     // Construct password reset URL
-    const url = `https://two-factor-authetication-jwt.onrender.com/reset-password/${user._id}/token/${token.token}`;
+    const url = `${process.env.BASE_URL}${user._id}/token/${token.token}`;
 
     // Send password reset email
     await sendResetPassword(user, user.email, url);
