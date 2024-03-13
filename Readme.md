@@ -1,4 +1,4 @@
-## Auth Verify User- Reset Password- Two-Factor Authentication (2FA)
+## Auth - Authentication - Authorization - Reset Password- JWT - Two-Factor Authentication (2FA)
 
 ## [Live Demo](https://two-factor-authetication-jwt.onrender.com/)
 
