@@ -1,5 +1,7 @@
 ## Auth Verify User- Reset Password- Two-Factor Authentication (2FA)
-## [Live Demo] (https://two-factor-authetication-jwt.onrender.com/)
+
+## [Live Demo](https://two-factor-authetication-jwt.onrender.com/)
+
 ## Server Side Technology
 
 ![NodeJs](https://img.shields.io/badge/Nodejs-20.9.0-yellowgreen)
@@ -46,8 +48,6 @@ User authentication is handled using Firebase, and Nodemailer is used for email 
 
 Furthermore, users can register to the system using their GitHub or Google accounts.
 
-
-
 ## Features
 
 - **Sign Up**
@@ -70,7 +70,6 @@ git clone https://github.com/musayar9/Two-Factor-Authetication---JWT.git
 ```
 
 2. Install dependencies server;
-
 
 ```
 npm install
@@ -97,11 +96,13 @@ or
 ```
 yarn
 ```
+
 ## Usage
 
 Before run the app, add the following information to the .env file in the root directory:
 
-1.a)  Server Side
+1.a) Server Side
+
 ```javascript
 BASE_URL = http://localhost:5173/
 NODE_EMAIL_USER = "<Your Nodemailer Email Address>"
@@ -117,29 +118,30 @@ MONGO="<MONGO Cluster>"
 npm run dev
 ```
 
-or 
+or
+
 ```
 yarn dev
 ```
 
-2.a)  Client Side
-```javascript
-VITE_FIREBASE_API_KEY ="<Your Firebase Api Key>"
-VITE_FIREBASE_APPID= "<Your Firebase Api ID>"
+2.a) Client Side
 
+```javascript
+VITE_FIREBASE_API_KEY = "<Your Firebase Api Key>";
+VITE_FIREBASE_APPID = "<Your Firebase Api ID>";
 ```
+
 2.b) Run the app locally:
 
 ```
 npm run dev
 ```
 
-or 
+or
+
 ```
 yarn dev
 ```
-
-
 
 ## User
 
@@ -152,7 +154,6 @@ Create a production build:
 ```
 npm run build
 ```
-
 
 ### Developer
 

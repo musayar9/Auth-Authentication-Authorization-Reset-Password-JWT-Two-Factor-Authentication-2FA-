@@ -76,7 +76,7 @@ const SignUp = () => {
   return (
     <>
       <Helmet>
-        <title>Sing Uo</title>
+        <title>Sing Up</title>
         <meta name="description" content="Sing Up" />
       </Helmet>
       <div className="mx-auto max-w-md p-2 my-8">
