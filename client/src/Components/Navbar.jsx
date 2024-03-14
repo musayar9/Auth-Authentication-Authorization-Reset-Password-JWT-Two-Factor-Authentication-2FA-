@@ -10,18 +10,17 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const auth = getAuth(app);
-const handleSignOut = async () => {
-  await dispatch(signOut(user._id)); 
+  const handleSignOut = async () => {
+    await dispatch(signOut(user._id));
 
-  const provider = new GithubAuthProvider();
-  try {
-    await signOut(auth, provider); 
-    navigate("/sign-in");
-  } catch (error) {
-    console.log("Signout failed", error);
-  }
-};
-
+    const provider = new GithubAuthProvider();
+    try {
+      await signOut(auth, provider);
+      navigate("/sign-in");
+    } catch (error) {
+      console.log("Signout failed", error);
+    }
+  };
 
   if (loading === "loading") {
     <p>logging out...</p>;
@@ -30,10 +29,13 @@ const handleSignOut = async () => {
   return (
     <nav className="bg-white dark:bg-gray-900   z-20 top-0 start-0  border-b border-gray-300 dark:border-gray-600 shadow ">
       <div className="max-w-6xl flex flex-wrap items-center justify-between mx-auto p-3">
-        <h2 className="text-lg md:text-xl font-bold text-slate-600 ">
-          Auth <span className="text-emerald-500 font-bold">OTP-JWT</span>
+        <h2 className="text-lg md:text-xl font-bold text-slate-600 flex gap-2 ">
+          Auth{" "}
+          <span className="text-emerald-500 font-bold hidden md:flex">
+            OTP-JWT
+          </span>
         </h2>
-        <div className="flex gap-2 font-semibold text-md self-center pr-16 ">
+        <div className="flex gap-2 font-semibold  text-sm md:text-lg self-center pr-16 ">
           <NavLink
             to="/"
             className={({ isActive }) => {
@@ -63,19 +65,12 @@ const handleSignOut = async () => {
           )}
         </div>
         <div className=" ">
-   
           {user && user.verified ? (
             <>
               <Dropdown
                 arrowIcon={false}
                 inline
-                label={
-                  <Avatar
-                    alt="user"
-                    img={user?.profilePicture}
-                    rounded
-                  />
-                }
+                label={<Avatar alt="user" img={user?.profilePicture} rounded />}
               >
                 <Dropdown.Header>
                   <span className="block text-sm text-blue-500">
@@ -91,7 +86,7 @@ const handleSignOut = async () => {
             </>
           ) : (
             <>
-              <button className="bg-emerald-500 px-4 py-1 text-white rounded-sm hover:scale-110 duration-150 ease-linear hover:bg-emerald-600 ">
+              <button className="bg-emerald-500 text-sm md:text-md px-2 md:px-4 py-1 text-white rounded-sm hover:scale-110 duration-150 ease-linear hover:bg-emerald-600 ">
                 <Link to="/sign-in">Sign In</Link>
               </button>
             </>
