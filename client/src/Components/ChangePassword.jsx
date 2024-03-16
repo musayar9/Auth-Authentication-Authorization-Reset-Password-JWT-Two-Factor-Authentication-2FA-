@@ -20,7 +20,6 @@ const ChangePassword = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({});
 
-  // password gönderilirken gelecek olan hatalrın kontolü
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [submitErrorMessage, setSubmitErrorMessage] = useState({});
