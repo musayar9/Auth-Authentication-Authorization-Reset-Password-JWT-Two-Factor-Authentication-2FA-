@@ -1,3 +1,12 @@
+
+
+
+
+
+
+https://github.com/musayar9/Auth-Authentication-Authorization-Reset-Password-JWT-Two-Factor-Authentication-2FA-/assets/96313325/a7d07c4b-94e1-48a2-9ead-80ea66f04242
+
+
 ## Auth - Authentication - Authorization - Reset Password- JWT - Two-Factor Authentication (2FA)
 
 ## [Live Demo](https://two-factor-authetication-jwt.onrender.com/)
